@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>App – Planilha Financeira Inteligente 360º</title>
 
-  <meta name="description" content="Aplicativo web da Planilha Financeira Inteligente 360º: organize sua renda, gastos e veja análises automáticas em tempo real.">
+  <meta name="description" content="Aplicativo web da Planilha Financeira Inteligente 360º: organize sua renda, gastos, compras parceladas e veja análises automáticas em tempo real.">
 
   <style>
     :root {
@@ -338,10 +338,16 @@
       font-size:0.8rem;
     }
 
+    .gasto-extra-info{
+      font-size:0.7rem;
+      color:var(--muted);
+      width:100%;
+    }
+
     .analise-resumo{
       font-size:0.8rem;
       color:var(--muted);
-      margin-bottom:12px;
+      margin-bottom:8px;
     }
 
     .categoria-item{
@@ -409,6 +415,69 @@
       gap:10px;
       flex-wrap:wrap;
     }
+
+    /* CALENDÁRIO DE PARCELAS */
+    .cal-title{
+      font-size:0.85rem;
+      margin-bottom:6px;
+    }
+
+    .cal-sub{
+      font-size:0.75rem;
+      color:var(--muted);
+      margin-bottom:8px;
+    }
+
+    .cal-grid{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:8px;
+    }
+
+    @media (max-width:900px){
+      .cal-grid{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+      }
+    }
+
+    @media (max-width:600px){
+      .cal-grid{
+        grid-template-columns:1fr;
+      }
+    }
+
+    .cal-card{
+      background:rgba(15,23,42,0.95);
+      border-radius:var(--radius-md);
+      border:1px solid rgba(55,65,81,0.9);
+      padding:8px;
+      font-size:0.78rem;
+    }
+
+    .cal-month{
+      display:flex;
+      justify-content:space-between;
+      margin-bottom:4px;
+    }
+
+    .cal-month-name{
+      font-weight:600;
+    }
+
+    .cal-tag{
+      font-size:0.7rem;
+      color:var(--muted);
+    }
+
+    .cal-value{
+      font-weight:600;
+      margin-bottom:2px;
+    }
+
+    .cal-note{
+      font-size:0.7rem;
+      color:var(--muted);
+    }
   </style>
 </head>
 <body>
@@ -416,24 +485,28 @@
     <header>
       <div class="top-nav">
         <a href="index.html">← Voltar para a página inicial</a>
-        <span style="font-size:0.75rem;color:var(--muted);">Seus dados ficam salvos apenas neste dispositivo.</span>
+        <span style="font-size:0.75rem;color:var(--muted);">
+          Seus dados ficam salvos apenas neste dispositivo (localStorage).
+        </span>
       </div>
 
       <div class="badge">
         <div class="badge-dot"></div>
-        Planilha Financeira Inteligente 360º • App Beta 1.0
+        Planilha Financeira Inteligente 360º • App Beta 1.1 (parcelas + calendário)
       </div>
       <h1>
         Controle financeiro em tempo real<br />
         com uma <span>planilha viva</span> direto do navegador.
       </h1>
       <p class="subtitle">
-        Informe sua renda, cadastre seus gastos e veja automaticamente onde está gastando demais,
-        quanto da renda já foi comprometida e qual categoria mais pesa no fim do mês.
+        Informe sua renda, cadastre seus gastos (fixos, variáveis e parcelados) e veja automaticamente
+        onde está gastando demais, quanto da renda já foi comprometida e como as parcelas vão acabar
+        nos próximos meses.
       </p>
     </header>
 
     <main>
+      <!-- RESUMO -->
       <section class="card">
         <div class="card-header">
           <div>
@@ -470,12 +543,14 @@
         </div>
       </section>
 
+      <!-- GRID PRINCIPAL -->
       <section class="grid">
+        <!-- COLUNA ESQUERDA -->
         <section class="card">
           <div class="card-header">
             <div>
               <div class="card-title">Entrada de dados</div>
-              <div class="card-subtitle">Renda + gastos organizados por categoria.</div>
+              <div class="card-subtitle">Renda + gastos organizados por tipo e categoria.</div>
             </div>
           </div>
 
@@ -495,7 +570,7 @@
           <div class="gastos-header">
             <div>
               <div class="card-title" style="font-size:0.85rem;">Gastos do mês</div>
-              <div class="card-subtitle">Adicione tudo: fixo, variável, cartão, extras…</div>
+              <div class="card-subtitle">Adicione fixos, variáveis e compras parceladas.</div>
             </div>
             <button id="btn-add-gasto" class="btn btn-primary" type="button">
               + Adicionar gasto
@@ -511,6 +586,7 @@
           </div>
         </section>
 
+        <!-- COLUNA DIREITA -->
         <section class="card">
           <div class="card-header">
             <div>
@@ -535,8 +611,29 @@
               10–20% para investimentos e reserva.
             </div>
             <div id="insight-destaque"></div>
+            <div id="insight-parcelas"></div>
           </div>
         </section>
+      </section>
+
+      <!-- CALENDÁRIO DE PARCELAS -->
+      <section class="card" style="margin-top:8px;">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Calendário de parcelas (próximos 12 meses)</div>
+            <div class="card-subtitle">
+              Veja quanto da sua renda está preso em compras parceladas e quando esse peso começa a diminuir.
+            </div>
+          </div>
+        </div>
+
+        <div id="calendario-parcelas-wrapper">
+          <p id="calendario-vazio" class="cal-sub">
+            Nenhuma compra parcelada cadastrada ainda. Marque algum gasto como “Parcelado” para ver o calendário.
+          </p>
+          <div id="calendario-resumo" class="cal-sub" style="display:none;"></div>
+          <div id="cal-grid" class="cal-grid" style="display:none;"></div>
+        </div>
       </section>
 
       <section class="footer">
@@ -575,8 +672,13 @@
     const analiseResumo = document.getElementById("analise-resumo");
     const analiseCategorias = document.getElementById("analise-categorias");
     const insightDestaque = document.getElementById("insight-destaque");
+    const insightParcelas = document.getElementById("insight-parcelas");
 
-    const STORAGE_KEY = "planilha_inteligente_financeira_v1";
+    const calVazio = document.getElementById("calendario-vazio");
+    const calResumo = document.getElementById("calendario-resumo");
+    const calGrid = document.getElementById("cal-grid");
+
+    const STORAGE_KEY = "planilha_inteligente_financeira_v2"; // nova versão com parcelas
 
     function formatCurrency(valor) {
       return valor.toLocaleString("pt-BR", {
@@ -600,11 +702,14 @@
       const linhas = listaGastos.querySelectorAll(".gasto-row");
       linhas.forEach((linha) => {
         const categoria = linha.querySelector(".gasto-categoria").value;
+        const tipo = linha.querySelector(".gasto-tipo").value;
         const descricao = linha.querySelector(".gasto-descricao").value;
         const valor = parseValor(linha.querySelector(".gasto-valor").value);
+        const parcelasInput = linha.querySelector(".gasto-parcelas");
+        const parcelasRestantes = parcelasInput ? parseInt(parcelasInput.value) || 0 : 0;
 
         if (valor > 0 && categoria) {
-          gastos.push({ categoria, descricao, valor });
+          gastos.push({ categoria, tipo, descricao, valor, parcelasRestantes });
         }
       });
 
@@ -613,6 +718,7 @@
 
       atualizarResumo(estado);
       atualizarAnalise(estado);
+      atualizarCalendarioParcelas(estado);
     }
 
     function carregarEstado() {
@@ -638,62 +744,104 @@
 
         atualizarResumo(estado);
         atualizarAnalise(estado);
+        atualizarCalendarioParcelas(estado);
       } catch (e) {
         console.error("Erro ao carregar estado:", e);
         adicionarLinhaGasto();
       }
     }
 
+    function criarOpcaoSelect(select, valor, texto) {
+      const opt = document.createElement("option");
+      opt.value = valor;
+      opt.textContent = texto;
+      select.appendChild(opt);
+    }
+
     function adicionarLinhaGasto(dados = {}) {
       const row = document.createElement("div");
       row.className = "gasto-row";
 
-      const select = document.createElement("select");
-      select.className = "gasto-categoria";
-      categoriasPadrao.forEach((cat) => {
-        const opt = document.createElement("option");
-        opt.value = cat;
-        opt.textContent = cat;
-        select.appendChild(opt);
-      });
+      // Categoria
+      const selectCategoria = document.createElement("select");
+      selectCategoria.className = "gasto-categoria";
+      categoriasPadrao.forEach((cat) => criarOpcaoSelect(selectCategoria, cat, cat));
 
-      if (dados.categoria) {
-        select.value = dados.categoria;
-      }
+      // Tipo
+      const selectTipo = document.createElement("select");
+      selectTipo.className = "gasto-tipo";
+      criarOpcaoSelect(selectTipo, "Fixo", "Fixo");
+      criarOpcaoSelect(selectTipo, "Variável", "Variável");
+      criarOpcaoSelect(selectTipo, "Parcelado", "Parcelado");
 
+      // Descrição
       const inputDesc = document.createElement("input");
       inputDesc.type = "text";
-      inputDesc.placeholder = "Descrição (opcional)";
+      inputDesc.placeholder = "Descrição (ex.: Aluguel, Cartão Nubank...)";
       inputDesc.className = "gasto-descricao";
-      inputDesc.value = dados.descricao || "";
 
+      // Valor
       const inputValor = document.createElement("input");
       inputValor.type = "number";
       inputValor.min = "0";
       inputValor.step = "0.01";
-      inputValor.placeholder = "Valor (R$)";
+      inputValor.placeholder = "Valor mensal (R$)";
       inputValor.className = "gasto-valor";
-      inputValor.value = dados.valor != null ? dados.valor : "";
 
+      // Parcelas restantes (só faz sentido para tipo Parcelado)
+      const inputParcelas = document.createElement("input");
+      inputParcelas.type = "number";
+      inputParcelas.min = "0";
+      inputParcelas.step = "1";
+      inputParcelas.placeholder = "Parcelas restantes";
+      inputParcelas.className = "gasto-parcelas";
+
+      // Texto explicativo
+      const extraInfo = document.createElement("div");
+      extraInfo.className = "gasto-extra-info";
+      extraInfo.textContent = "Para compras parceladas, informe o valor da parcela e quantas ainda faltam.";
+
+      // Botão remover
       const btnRemover = document.createElement("button");
       btnRemover.type = "button";
       btnRemover.className = "btn btn-ghost btn-icon";
       btnRemover.textContent = "–";
+
+      // Preenchendo com dados, se vier do armazenamento
+      selectCategoria.value = dados.categoria || categoriasPadrao[0];
+      selectTipo.value = dados.tipo || "Fixo";
+      inputDesc.value = dados.descricao || "";
+      inputValor.value = dados.valor != null ? dados.valor : "";
+      inputParcelas.value = dados.parcelasRestantes != null ? dados.parcelasRestantes : "";
+
+      // Mostrar/esconder campo de parcelas conforme o tipo
+      function atualizarVisibilidadeParcelas() {
+        const isParcelado = selectTipo.value === "Parcelado";
+        inputParcelas.style.display = isParcelado ? "inline-block" : "none";
+        extraInfo.style.display = isParcelado ? "block" : "none";
+      }
+      atualizarVisibilidadeParcelas();
 
       btnRemover.addEventListener("click", () => {
         row.remove();
         salvarEstado();
       });
 
-      [select, inputDesc, inputValor].forEach((el) => {
+      [selectCategoria, selectTipo, inputDesc, inputValor, inputParcelas].forEach((el) => {
         el.addEventListener("input", salvarEstado);
-        el.addEventListener("change", salvarEstado);
+        el.addEventListener("change", () => {
+          if (el === selectTipo) atualizarVisibilidadeParcelas();
+          salvarEstado();
+        });
       });
 
-      row.appendChild(select);
+      row.appendChild(selectCategoria);
+      row.appendChild(selectTipo);
       row.appendChild(inputDesc);
       row.appendChild(inputValor);
+      row.appendChild(inputParcelas);
       row.appendChild(btnRemover);
+      row.appendChild(extraInfo);
 
       listaGastos.appendChild(row);
     }
@@ -747,11 +895,12 @@
     function atualizarAnalise(estado) {
       const gastos = estado.gastos || [];
       analiseCategorias.innerHTML = "";
+      insightDestaque.textContent = "";
+      insightParcelas.textContent = "";
 
       if (!gastos.length) {
         analiseResumo.textContent =
           "Sem gastos cadastrados ainda. Adicione pelo menos um para ver a análise.";
-        insightDestaque.textContent = "";
         return;
       }
 
@@ -825,8 +974,106 @@
           <strong>${percTop.toFixed(1)}%</strong> de todos os gastos do mês. 
           Avalie se esse nível faz sentido para sua realidade e objetivos.
         `;
-      } else {
-        insightDestaque.textContent = "";
+      }
+
+      // Insight específico para PARCELAS
+      const apenasParcelados = gastos.filter(g => g.tipo === "Parcelado" && g.parcelasRestantes > 0);
+      if (apenasParcelados.length) {
+        const totalParcelasMes = apenasParcelados.reduce((acc, g) => acc + (g.valor || 0), 0);
+        const totalParcelasFuturas = apenasParcelados.reduce(
+          (acc, g) => acc + (g.valor || 0) * (g.parcelasRestantes || 0),
+          0
+        );
+        insightParcelas.innerHTML = `
+          <span class="insight-highlight">Parcelas:</span>
+          você está comprometendo <strong>${formatCurrency(
+            totalParcelasMes
+          )}</strong> por mês com compras parceladas, somando aproximadamente
+          <strong>${formatCurrency(totalParcelasFuturas)}</strong> até o fim de todas as parcelas.
+        `;
+      }
+    }
+
+    function atualizarCalendarioParcelas(estado) {
+      const gastos = estado.gastos || [];
+      const apenasParcelados = gastos.filter(g => g.tipo === "Parcelado" && g.parcelasRestantes > 0);
+
+      calGrid.innerHTML = "";
+
+      if (!apenasParcelados.length) {
+        calVazio.style.display = "block";
+        calResumo.style.display = "none";
+        calGrid.style.display = "none";
+        return;
+      }
+
+      calVazio.style.display = "none";
+      calResumo.style.display = "block";
+      calGrid.style.display = "grid";
+
+      const totalParcelasMes = apenasParcelados.reduce((acc, g) => acc + (g.valor || 0), 0);
+      const totalParcelasFuturas = apenasParcelados.reduce(
+        (acc, g) => acc + (g.valor || 0) * (g.parcelasRestantes || 0),
+        0
+      );
+
+      calResumo.innerHTML = `
+        Hoje você tem <strong>${apenasParcelados.length}</strong> compra(s) parcelada(s),
+        somando <strong>${formatCurrency(totalParcelasMes)}</strong> por mês.
+        Ao longo dos próximos meses, isso representa cerca de
+        <strong>${formatCurrency(totalParcelasFuturas)}</strong> em parcelas futuras.
+      `;
+
+      const hoje = new Date();
+      const nomeMeses = [
+        "Jan", "Fev", "Mar", "Abr", "Mai", "Jun",
+        "Jul", "Ago", "Set", "Out", "Nov", "Dez"
+      ];
+
+      for (let m = 0; m < 12; m++) {
+        const dataMes = new Date(hoje.getFullYear(), hoje.getMonth() + m, 1);
+        let totalMes = 0;
+
+        apenasParcelados.forEach(g => {
+          if (m < (g.parcelasRestantes || 0)) {
+            totalMes += g.valor || 0;
+          }
+        });
+
+        const card = document.createElement("div");
+        card.className = "cal-card";
+
+        const topo = document.createElement("div");
+        topo.className = "cal-month";
+
+        const mesNome = document.createElement("span");
+        mesNome.className = "cal-month-name";
+        mesNome.textContent = `${nomeMeses[dataMes.getMonth()]} / ${String(dataMes.getFullYear()).slice(-2)}`;
+
+        const tag = document.createElement("span");
+        tag.className = "cal-tag";
+        tag.textContent = m === 0 ? "Mês atual" : `${m} mês(es) à frente`;
+
+        topo.appendChild(mesNome);
+        topo.appendChild(tag);
+
+        const valorEl = document.createElement("div");
+        valorEl.className = "cal-value";
+        valorEl.textContent = formatCurrency(totalMes);
+
+        const note = document.createElement("div");
+        note.className = "cal-note";
+        if (totalMes === 0) {
+          note.textContent = "Sem parcelas ativas neste mês.";
+        } else {
+          note.textContent = "Valor em parcelas ainda ativas.";
+        }
+
+        card.appendChild(topo);
+        card.appendChild(valorEl);
+        card.appendChild(note);
+
+        calGrid.appendChild(card);
       }
     }
 
