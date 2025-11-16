@@ -3,22 +3,36 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Planilha Financeira Inteligente</title>
+
+  <title>Planilha Financeira Inteligente 360º – Organize seu dinheiro sem Excel</title>
+
+  <!-- SEO -->
+  <meta name="description" content="Planilha Financeira Inteligente 360º: organize seus gastos, descubra para onde seu dinheiro está indo, veja análises automáticas e metas – direto do navegador, sem precisar de Excel.">
+  <meta name="keywords" content="planilha financeira, controle financeiro, finanças pessoais, orçamento mensal, organizar gastos, planilha online, sem excel">
+  <meta name="author" content="Seu Nome">
+  <meta name="robots" content="index,follow">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Planilha Financeira Inteligente 360º" />
+  <meta property="og:description" content="Uma planilha viva, que analisa seus gastos automaticamente e mostra onde você está perdendo dinheiro." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://seu-usuario.github.io/planilha-inteligente/" />
+  <!-- Se depois você tiver uma imagem, coloca aqui -->
+  <!-- <meta property="og:image" content="https://seu-usuario.github.io/planilha-inteligente/thumbnail.jpg" /> -->
+
   <style>
     :root {
       --bg: #020617;
-      --card: #0f172a;
-      --card-soft: #020617;
-      --stroke: #1e293b;
+      --card: #020617;
+      --stroke: #1f2937;
       --text: #e5e7eb;
       --muted: #9ca3af;
       --accent: #38bdf8;
+      --accent-2: #6366f1;
       --danger: #f97373;
-      --success: #4ade80;
-      --warning: #facc15;
-      --radius-lg: 18px;
-      --radius-md: 12px;
-      --shadow-soft: 0 18px 40px rgba(15, 23, 42, 0.8);
+      --radius-lg: 22px;
+      --radius-md: 14px;
+      --shadow-soft: 0 24px 60px rgba(15, 23, 42, 0.9);
     }
 
     * {
@@ -30,22 +44,108 @@
     }
 
     body {
-      background: radial-gradient(circle at top, #1e293b 0, #020617 55%);
-      color: var(--text);
       min-height: 100vh;
+      background:
+        radial-gradient(circle at top, rgba(56,189,248,0.20), transparent 55%),
+        radial-gradient(circle at bottom, rgba(129,140,248,0.18), transparent 55%),
+        #020617;
+      color: var(--text);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
     }
 
     .app {
       max-width: 1100px;
       margin: 0 auto;
-      padding: 16px 16px 32px;
+      padding: 18px 16px 40px;
     }
 
-    header {
+    /* HEADER / NAV */
+    .nav {
       display: flex;
-      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      gap: 12px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
       gap: 8px;
-      margin-bottom: 20px;
+    }
+
+    .logo-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 30%, #38bdf8, #1d4ed8);
+      box-shadow: 0 0 20px rgba(56,189,248,0.7);
+    }
+
+    .logo-text {
+      font-weight: 600;
+      font-size: 0.95rem;
+      letter-spacing: -0.03em;
+    }
+
+    .logo-text span {
+      opacity: 0.7;
+      font-weight: 400;
+      font-size: 0.8rem;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      font-size: 0.85rem;
+      color: var(--muted);
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .nav-links a {
+      opacity: 0.9;
+    }
+
+    .nav-links a:hover {
+      opacity: 1;
+    }
+
+    .btn-nav {
+      padding: 7px 13px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      background: rgba(15,23,42,0.9);
+    }
+
+    .btn-nav span {
+      font-size: 0.85rem;
+    }
+
+    /* HERO */
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+      gap: 22px;
+      align-items: center;
+      margin-top: 10px;
+      margin-bottom: 28px;
+    }
+
+    @media (max-width: 900px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
     }
 
     .badge {
@@ -53,222 +153,91 @@
       align-items: center;
       gap: 8px;
       font-size: 0.75rem;
-      padding: 4px 10px;
+      padding: 4px 11px;
       border-radius: 999px;
-      background: rgba(148, 163, 184, 0.08);
-      border: 1px solid rgba(148, 163, 184, 0.25);
-      width: fit-content;
+      background: rgba(15, 23, 42, 0.96);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      margin-bottom: 8px;
     }
 
     .badge-dot {
-      width: 8px;
-      height: 8px;
+      width: 9px;
+      height: 9px;
       border-radius: 999px;
-      background: radial-gradient(circle at 30% 30%, #f9a8d4, #38bdf8);
-      box-shadow: 0 0 12px rgba(56, 189, 248, 0.7);
+      background: radial-gradient(circle at 30% 30%, #f97316, #facc15);
+      box-shadow: 0 0 12px rgba(250, 204, 21, 0.8);
     }
 
-    h1 {
-      font-size: 1.8rem;
-      font-weight: 600;
-      letter-spacing: -0.03em;
+    .hero h1 {
+      font-size: clamp(1.9rem, 3.5vw, 2.6rem);
+      line-height: 1.1;
+      letter-spacing: -0.04em;
+      margin-bottom: 10px;
     }
 
-    h1 span {
+    .hero h1 span {
       background: linear-gradient(to right, #38bdf8, #a855f7);
       -webkit-background-clip: text;
       color: transparent;
     }
 
-    .subtitle {
-      font-size: 0.9rem;
+    .hero-sub {
+      font-size: 0.95rem;
       color: var(--muted);
-      max-width: 520px;
+      max-width: 470px;
+      margin-bottom: 12px;
     }
 
-    main {
+    .hero-bullets {
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 6px;
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 16px;
     }
 
-    .grid {
-      display: grid;
-      grid-template-columns: 1.1fr 1.3fr;
-      gap: 16px;
+    .hero-bullets span::before {
+      content: "• ";
+      color: #38bdf8;
     }
 
-    @media (max-width: 800px) {
-      .grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .card {
-      background: radial-gradient(circle at top left, #020617, #020617 55%);
-      border-radius: var(--radius-lg);
-      border: 1px solid rgba(148, 163, 184, 0.25);
-      padding: 16px;
-      box-shadow: var(--shadow-soft);
-    }
-
-    .card-header {
+    .hero-cta {
       display: flex;
-      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
       align-items: center;
       margin-bottom: 10px;
-    }
-
-    .card-title {
-      font-size: 0.95rem;
-      font-weight: 500;
-    }
-
-    .card-subtitle {
-      font-size: 0.8rem;
-      color: var(--muted);
-    }
-
-    .pill {
-      font-size: 0.7rem;
-      padding: 4px 9px;
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.3);
-      color: var(--muted);
-    }
-
-    /* Resumo */
-    .resumo-cards {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 8px;
-    }
-
-    @media (max-width: 800px) {
-      .resumo-cards {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-    }
-
-    .resumo-card {
-      background: linear-gradient(145deg, #020617, #020617);
-      border-radius: var(--radius-md);
-      padding: 10px;
-      border: 1px solid rgba(148, 163, 184, 0.25);
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .resumo-label {
-      font-size: 0.7rem;
-      color: var(--muted);
-    }
-
-    .resumo-valor {
-      font-size: 0.95rem;
-      font-weight: 600;
-    }
-
-    .resumo-extra {
-      font-size: 0.7rem;
-      color: var(--muted);
-    }
-
-    .chip {
-      font-size: 0.68rem;
-      padding: 2px 7px;
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.3);
-      align-self: flex-start;
-    }
-
-    .chip-danger {
-      border-color: rgba(248, 113, 113, 0.7);
-      color: #fecaca;
-    }
-
-    .chip-success {
-      border-color: rgba(74, 222, 128, 0.7);
-      color: #bbf7d0;
-    }
-
-    .chip-warning {
-      border-color: rgba(250, 204, 21, 0.7);
-      color: #fef9c3;
-    }
-
-    /* Formulários */
-    .field-group {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      margin-bottom: 10px;
-    }
-
-    label {
-      font-size: 0.8rem;
-      color: var(--muted);
-    }
-
-    input,
-    select {
-      background: rgba(15, 23, 42, 0.9);
-      border-radius: 999px;
-      border: 1px solid var(--stroke);
-      padding: 8px 10px;
-      color: var(--text);
-      font-size: 0.9rem;
-      outline: none;
-      width: 100%;
-    }
-
-    input:focus,
-    select:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.4);
-    }
-
-    .linha {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .linha > * {
-      flex: 1 1 0;
-      min-width: 80px;
     }
 
     .btn {
       border-radius: 999px;
       border: none;
-      padding: 8px 12px;
-      font-size: 0.85rem;
+      padding: 10px 16px;
+      font-size: 0.9rem;
       cursor: pointer;
-      white-space: nowrap;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 6px;
+      gap: 8px;
       transition: transform 0.08s ease, box-shadow 0.08s ease, background 0.08s ease;
+      white-space: nowrap;
+      text-decoration: none;
     }
 
     .btn-primary {
       background: linear-gradient(135deg, #38bdf8, #6366f1);
       color: #0b1120;
-      box-shadow: 0 12px 30px rgba(56, 189, 248, 0.4);
+      box-shadow: 0 20px 45px rgba(56, 189, 248, 0.5);
     }
 
     .btn-primary:active {
       transform: translateY(1px);
-      box-shadow: 0 6px 16px rgba(56, 189, 248, 0.35);
+      box-shadow: 0 10px 25px rgba(56, 189, 248, 0.45);
     }
 
     .btn-ghost {
-      background: rgba(15, 23, 42, 0.8);
+      background: rgba(15,23,42,0.9);
       color: var(--muted);
       border: 1px solid rgba(148, 163, 184, 0.35);
     }
@@ -277,562 +246,502 @@
       transform: translateY(1px);
     }
 
-    .btn-icon {
-      width: 30px;
-      padding: 0;
-      border-radius: 999px;
+    .cta-note {
       font-size: 0.8rem;
+      color: var(--muted);
     }
 
-    .gastos-header {
+    .hero-trust {
+      font-size: 0.75rem;
+      color: var(--muted);
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 8px;
       gap: 8px;
-    }
-
-    .gastos-lista {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      max-height: 260px;
-      overflow-y: auto;
-      padding-right: 4px;
-    }
-
-    .gasto-row {
-      display: flex;
-      gap: 6px;
+      align-items: center;
       flex-wrap: wrap;
-      background: rgba(15, 23, 42, 0.8);
-      border-radius: var(--radius-md);
-      padding: 6px;
-      border: 1px solid rgba(30, 64, 175, 0.7);
     }
 
-    .gasto-row select,
-    .gasto-row input {
-      border-radius: 999px;
-      padding: 6px 8px;
-      font-size: 0.8rem;
-    }
-
-    .gasto-row small {
-      font-size: 0.7rem;
-      color: var(--muted);
-    }
-
-    /* Análise */
-    .analise-resumo {
-      font-size: 0.8rem;
-      color: var(--muted);
-      margin-bottom: 12px;
-    }
-
-    .categoria-item {
-      margin-bottom: 8px;
-    }
-
-    .categoria-top {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.8rem;
-      margin-bottom: 4px;
-    }
-
-    .categoria-nome {
-      color: #e5e7eb;
-    }
-
-    .categoria-percentual {
-      color: var(--muted);
-    }
-
-    .barra-externa {
-      width: 100%;
-      height: 7px;
-      border-radius: 999px;
-      background: rgba(15, 23, 42, 1);
-      border: 1px solid rgba(30, 64, 175, 0.9);
-      overflow: hidden;
-    }
-
-    .barra-interna {
-      height: 100%;
-      border-radius: 999px;
-      background: linear-gradient(90deg, #38bdf8, #a855f7);
-      transform-origin: left;
-      transform: scaleX(0);
-      transition: transform 0.25s ease-out;
-    }
-
-    .insights {
-      font-size: 0.8rem;
-      color: var(--muted);
-      display: flex;
-      flex-direction: column;
+    .hero-trust span {
+      display: inline-flex;
+      align-items: center;
       gap: 4px;
     }
 
-    .insight-highlight {
-      color: #e5e7eb;
+    .star {
+      font-size: 0.8rem;
+      color: #facc15;
     }
 
-    .divider {
-      height: 1px;
-      border: none;
-      background: radial-gradient(circle at left, rgba(148, 163, 184, 0.5), rgba(15, 23, 42, 0));
-      margin: 10px 0;
+    /* HERO - CARD DEMO */
+    .hero-preview {
+      background: rgba(15,23,42,0.98);
+      border-radius: 26px;
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      padding: 14px;
+      box-shadow: var(--shadow-soft);
+      position: relative;
+      overflow: hidden;
     }
 
-    .footer {
-      margin-top: 16px;
+    .hero-preview::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background:
+        radial-gradient(circle at 0 0, rgba(56,189,248,0.18), transparent 55%),
+        radial-gradient(circle at 100% 0, rgba(129,140,248,0.26), transparent 55%);
+      opacity: 0.8;
+      pointer-events: none;
+    }
+
+    .hero-preview-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .preview-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      font-size: 0.8rem;
+    }
+
+    .preview-pill {
+      padding: 3px 9px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      color: var(--muted);
+    }
+
+    .preview-badge {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .preview-main {
+      background: rgba(15,23,42,0.9);
+      border-radius: 16px;
+      border: 1px solid rgba(30,64,175,0.8);
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+
+    .preview-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .preview-card {
+      background: linear-gradient(135deg, #020617, #020617);
+      border-radius: 14px;
+      border: 1px solid rgba(148,163,184,0.4);
+      padding: 8px;
+      font-size: 0.78rem;
+    }
+
+    .preview-label {
+      color: var(--muted);
+      margin-bottom: 3px;
+    }
+
+    .preview-value {
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .preview-tag {
       font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    .preview-bar {
+      width: 100%;
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(15,23,42,1);
+      border: 1px solid rgba(30,64,175,0.9);
+      overflow: hidden;
+      margin-top: 4px;
+    }
+
+    .preview-bar-inner {
+      height: 100%;
+      width: 70%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #38bdf8, #a855f7);
+    }
+
+    .preview-footer {
+      font-size: 0.75rem;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 4px;
+    }
+
+    /* SECTION BENEFICIOS */
+    .section {
+      margin-bottom: 30px;
+    }
+
+    .section-title {
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+    }
+
+    .section-sub {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-bottom: 14px;
+      max-width: 640px;
+    }
+
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    @media (max-width: 900px) {
+      .benefits-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .benefit-card {
+      background: rgba(15,23,42,0.98);
+      border-radius: var(--radius-md);
+      border: 1px solid rgba(55,65,81,0.9);
+      padding: 10px;
+      font-size: 0.84rem;
+    }
+
+    .benefit-title {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .benefit-tag {
+      font-size: 0.7rem;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    /* COMO FUNCIONA */
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      font-size: 0.85rem;
+    }
+
+    @media (max-width: 800px) {
+      .steps {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .step {
+      background: rgba(15,23,42,0.98);
+      border-radius: var(--radius-md);
+      border: 1px dashed rgba(148, 163, 184, 0.5);
+      padding: 10px;
+    }
+
+    .step-num {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .step-title {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    /* FAQ */
+    .faq-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 0.85rem;
+    }
+
+    .faq-item {
+      background: rgba(15,23,42,0.98);
+      border-radius: var(--radius-md);
+      border: 1px solid rgba(55,65,81,0.9);
+      padding: 10px;
+    }
+
+    .faq-q {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .faq-a {
+      color: var(--muted);
+    }
+
+    /* FOOTER */
+    .footer {
+      font-size: 0.75rem;
       color: var(--muted);
       display: flex;
       justify-content: space-between;
       gap: 10px;
       flex-wrap: wrap;
+      border-top: 1px solid rgba(31,41,55,0.9);
+      padding-top: 10px;
+      margin-top: 18px;
     }
   </style>
 </head>
 <body>
   <div class="app">
-    <header>
-      <div class="badge">
-        <div class="badge-dot"></div>
-        Planilha Financeira Inteligente • Beta 1.0
+    <header class="nav">
+      <div class="logo">
+        <div class="logo-icon"></div>
+        <div class="logo-text">
+          Planilha 360<span> • Financeira Inteligente</span>
+        </div>
       </div>
-      <h1>
-        Organize seu dinheiro em segundos<br />
-        com uma <span>planilha viva</span> direto no navegador.
-      </h1>
-      <p class="subtitle">
-        Preencha sua renda, cadastre seus gastos e veja na hora para onde o dinheiro está indo,
-        onde você está exagerando e quanto poderia sobrar todo mês.
-      </p>
+      <nav class="nav-links">
+        <a href="#beneficios">Benefícios</a>
+        <a href="#como-funciona">Como funciona</a>
+        <a href="#faq">Dúvidas</a>
+        <a class="btn-nav" href="app.html">
+          <span>Usar agora</span> →
+        </a>
+      </nav>
     </header>
 
-    <main>
-      <section class="card">
-        <div class="card-header">
-          <div>
-            <div class="card-title">Resumo financeiro</div>
-            <div class="card-subtitle">Tudo o que importa em uma foto rápida do mês.</div>
-          </div>
-          <span class="pill">Dados salvos no seu dispositivo</span>
+    <!-- HERO -->
+    <section class="hero">
+      <div>
+        <div class="badge">
+          <div class="badge-dot"></div>
+          Ferramenta 100% online • Sem instalar nada
         </div>
 
-        <div class="resumo-cards">
-          <div class="resumo-card">
-            <span class="resumo-label">Renda mensal</span>
-            <span id="resumo-renda" class="resumo-valor">R$ 0,00</span>
-            <span class="resumo-extra">O quanto entra todo mês</span>
+        <h1>
+          Organize suas finanças com uma
+          <span>planilha viva</span>, sem depender do Excel.
+        </h1>
+
+        <p class="hero-sub">
+          A Planilha Financeira Inteligente 360º analisa seus gastos automaticamente,
+          mostra onde o dinheiro está sendo drenado e te ajuda a criar um plano real
+          para sobrar mais todo mês – direto do navegador.
+        </p>
+
+        <div class="hero-bullets">
+          <span>Controle total de gastos por categoria (moradia, dívidas, lazer, investimentos…)</span>
+          <span>Análises automáticas: saldo, percentual da renda e ponto de atenção</span>
+          <span>Funciona no celular, tablet e computador – sem baixar nada</span>
+        </div>
+
+        <div class="hero-cta">
+          <a href="app.html" class="btn btn-primary">
+            Começar agora (Grátis) →
+          </a>
+          <a href="#como-funciona" class="btn btn-ghost">
+            Ver como funciona
+          </a>
+        </div>
+
+        <div class="cta-note">
+          Seus dados ficam apenas no seu dispositivo. Se você enviar o link para alguém,
+          a outra pessoa verá tudo zerado – ideal para privacidade.
+        </div>
+
+        <div class="hero-trust">
+          <span><span class="star">★</span> Pensada para quem está cansado de planilha bagunçada.</span>
+          <span>⏱ Em menos de 5 minutos você tem um raio-x completo do seu mês.</span>
+        </div>
+      </div>
+
+      <!-- Preview visual da planilha -->
+      <aside class="hero-preview" aria-hidden="true">
+        <div class="hero-preview-inner">
+          <div class="preview-top">
+            <span class="preview-badge">Visão do mês • Simulação</span>
+            <span class="preview-pill">Beta 1.0</span>
           </div>
 
-          <div class="resumo-card">
-            <span class="resumo-label">Total de despesas</span>
-            <span id="resumo-despesas" class="resumo-valor">R$ 0,00</span>
-            <span class="resumo-extra">Soma de todos os gastos</span>
+          <div class="preview-main">
+            <div class="preview-grid">
+              <div class="preview-card">
+                <div class="preview-label">Renda mensal</div>
+                <div class="preview-value">R$ 3.500,00</div>
+                <div class="preview-tag">Entrada total</div>
+              </div>
+              <div class="preview-card">
+                <div class="preview-label">Despesas</div>
+                <div class="preview-value">R$ 2.630,00</div>
+                <div class="preview-tag">Somando fixo + variável</div>
+              </div>
+              <div class="preview-card">
+                <div class="preview-label">Saldo do mês</div>
+                <div class="preview-value">R$ 870,00</div>
+                <div class="preview-tag">Potencial para investir</div>
+              </div>
+              <div class="preview-card">
+                <div class="preview-label">Renda comprometida</div>
+                <div class="preview-value">75%</div>
+                <div class="preview-tag">Zona de atenção moderada</div>
+              </div>
+            </div>
+
+            <div style="margin-top:10px; font-size:0.8rem; color:var(--muted);">
+              Categoria que mais pesa: <strong>Moradia (38%)</strong>
+              <div class="preview-bar">
+                <div class="preview-bar-inner"></div>
+              </div>
+            </div>
           </div>
 
-          <div class="resumo-card">
-            <span class="resumo-label">Saldo do mês</span>
-            <span id="resumo-saldo" class="resumo-valor">R$ 0,00</span>
-            <span id="resumo-saldo-chip" class="chip chip-success">Equilibrado</span>
-          </div>
-
-          <div class="resumo-card">
-            <span class="resumo-label">% da renda comprometida</span>
-            <span id="resumo-percentual" class="resumo-valor">0%</span>
-            <span id="resumo-alerta" class="resumo-extra">Abaixo de 50% costuma ser saudável.</span>
+          <div class="preview-footer">
+            <span>💡 Insight automático: ajuste dívidas + lazer antes de cortar o essencial.</span>
+            <span>Atualiza em tempo real enquanto você digita.</span>
           </div>
         </div>
-      </section>
+      </aside>
+    </section>
 
-      <section class="grid">
-        <!-- Coluna esquerda: entrada de dados -->
-        <section class="card">
-          <div class="card-header">
-            <div>
-              <div class="card-title">Entrada de dados</div>
-              <div class="card-subtitle">Renda + gastos organizados por categoria.</div>
-            </div>
-          </div>
+    <!-- BENEFÍCIOS -->
+    <section id="beneficios" class="section">
+      <h2 class="section-title">Por que usar a Planilha Financeira Inteligente 360º?</h2>
+      <p class="section-sub">
+        Em vez de perder horas tentando ajustar uma planilha genérica, você usa uma ferramenta feita
+        para pessoas reais, que têm boleto, cartão de crédito, imprevistos e metas.
+      </p>
 
-          <div class="field-group">
-            <label for="renda-mensal">Renda mensal total (R$)</label>
-            <input
-              id="renda-mensal"
-              type="number"
-              min="0"
-              step="0.01"
-              placeholder="Ex.: 2500"
-            />
-          </div>
-
-          <hr class="divider" />
-
-          <div class="gastos-header">
-            <div>
-              <div class="card-title" style="font-size:0.85rem;">Gastos do mês</div>
-              <div class="card-subtitle">Adicione tudo: fixo, variável, cartão, extras…</div>
-            </div>
-            <button id="btn-add-gasto" class="btn btn-primary" type="button">
-              + Adicionar gasto
-            </button>
-          </div>
-
-          <div id="lista-gastos" class="gastos-lista"></div>
-
-          <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap;">
-            <button id="btn-limpar" class="btn btn-ghost" type="button">
-              Limpar tudo
-            </button>
-          </div>
-        </section>
-
-        <!-- Coluna direita: análise -->
-        <section class="card">
-          <div class="card-header">
-            <div>
-              <div class="card-title">Análise inteligente</div>
-              <div class="card-subtitle">Descubra onde o dinheiro está indo de verdade.</div>
-            </div>
-          </div>
-
-          <p id="analise-resumo" class="analise-resumo">
-            Preencha os gastos para ver o raio-x das categorias.
+      <div class="benefits-grid">
+        <article class="benefit-card">
+          <div class="benefit-title">1. Visão clara do dinheiro</div>
+          <div class="benefit-tag">Renda, despesas, saldo e percentual da renda em segundos.</div>
+          <p>
+            Basta informar sua renda e cadastrar seus gastos por categoria.
+            A planilha calcula tudo automaticamente e destaca o que está puxando seu orçamento para baixo.
           </p>
+        </article>
 
-          <div id="analise-categorias"></div>
+        <article class="benefit-card">
+          <div class="benefit-title">2. Foco em decisões, não em fórmulas</div>
+          <div class="benefit-tag">Você não precisa saber nada de Excel ou finanças.</div>
+          <p>
+            Em vez de quebrar a cabeça com funções, você só preenche:
+            o sistema mostra se você está equilibrado, apertado ou no vermelho – de forma visual.
+          </p>
+        </article>
 
-          <hr class="divider" />
+        <article class="benefit-card">
+          <div class="benefit-title">3. Funciona em qualquer dispositivo</div>
+          <div class="benefit-tag">Celular, tablet, notebook – basta ter internet.</div>
+          <p>
+            Você acessa pelo navegador, como se fosse um site. Pode usar no ônibus, no trabalho
+            ou em casa. Seus dados ficam guardados no próprio dispositivo via navegador.
+          </p>
+        </article>
+      </div>
+    </section>
 
-          <div class="insights">
-            <div>
-              <span class="insight-highlight">Dica:</span>
-              tente manter despesas essenciais até ~50% da renda
-              (moradia, alimentação, transporte) e destinar pelo menos
-              10–20% para investimentos e reserva.
-            </div>
-            <div id="insight-destaque"></div>
+    <!-- COMO FUNCIONA -->
+    <section id="como-funciona" class="section">
+      <h2 class="section-title">Como funciona na prática?</h2>
+      <p class="section-sub">
+        A experiência foi pensada para ser simples: em poucos minutos você já entende para onde o dinheiro
+        está indo e o que precisa ser ajustado.
+      </p>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">Passo 1</div>
+          <div class="step-title">Informe sua renda mensal</div>
+          <p>
+            Coloque quanto entra no mês (salário, freelance, extra).
+            A planilha usa esse valor como base para calcular o peso de cada despesa.
+          </p>
+        </div>
+
+        <div class="step">
+          <div class="step-num">Passo 2</div>
+          <div class="step-title">Cadastre seus gastos por categoria</div>
+          <p>
+            Moradia, alimentação, transporte, dívidas, lazer, saúde, educação, investimentos,
+            reserva de emergência e outros. Você pode adicionar quantos itens quiser.
+          </p>
+        </div>
+
+        <div class="step">
+          <div class="step-num">Passo 3</div>
+          <div class="step-title">Veja a análise inteligente</div>
+          <p>
+            Automaticamente, a ferramenta mostra:
+            quanto você já comprometeu da renda, o saldo do mês
+            e qual categoria mais pesa no seu bolso com barras visuais.
+          </p>
+        </div>
+      </div>
+
+      <div style="margin-top:14px;">
+        <a href="app.html" class="btn btn-primary">Abrir a planilha agora →</a>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="section">
+      <h2 class="section-title">Perguntas frequentes</h2>
+      <p class="section-sub">
+        Algumas dúvidas comuns de quem começa a usar uma planilha inteligente pela primeira vez.
+      </p>
+
+      <div class="faq-list">
+        <div class="faq-item">
+          <div class="faq-q">Meus dados ficam salvos onde?</div>
+          <div class="faq-a">
+            Os dados ficam salvos apenas no seu navegador, usando uma tecnologia chamada
+            <strong>localStorage</strong>. Isso significa que:
+            <br />– Se você enviar o link para outra pessoa, ela verá tudo zerado.
+            <br />– Se limpar o histórico/armazenamento do navegador, os dados são apagados.
           </div>
-        </section>
-      </section>
+        </div>
 
-      <section class="footer">
-        <span>Seus dados ficam apenas neste dispositivo (localStorage).</span>
-        <span>Versão Beta – criada para ser publicada em GitHub Pages.</span>
-      </section>
-    </main>
+        <div class="faq-item">
+          <div class="faq-q">Preciso pagar para usar?</div>
+          <div class="faq-a">
+            Esta é uma versão Beta gratuita. A ideia é evoluir para versões mais avançadas,
+            com mais gráficos, metas e relatórios – mas a base de controle já está liberada.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q">Posso usar do celular?</div>
+          <div class="faq-a">
+            Sim. A interface foi desenhada para funcionar bem em telas pequenas.
+            Você pode inclusive adicionar um atalho na tela inicial do celular
+            para abrir como se fosse um app.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q">Consigo exportar os dados?</div>
+          <div class="faq-a">
+            Nesta versão, o foco é a análise rápida. Em versões futuras, a ideia é permitir
+            exportar para PDF/Excel e até sincronizar em nuvem.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <span>Planilha Financeira Inteligente 360º • Versão Beta 1.0</span>
+      <span>Projeto publicado em GitHub Pages para acesso rápido e leve.</span>
+    </footer>
   </div>
-
-  <script>
-    const categoriasPadrao = [
-      "Moradia",
-      "Alimentação",
-      "Transporte",
-      "Dívidas",
-      "Lazer",
-      "Saúde",
-      "Educação",
-      "Investimentos",
-      "Reserva de Emergência",
-      "Outros",
-    ];
-
-    const rendaInput = document.getElementById("renda-mensal");
-    const listaGastos = document.getElementById("lista-gastos");
-    const btnAddGasto = document.getElementById("btn-add-gasto");
-    const btnLimpar = document.getElementById("btn-limpar");
-
-    const resumoRenda = document.getElementById("resumo-renda");
-    const resumoDespesas = document.getElementById("resumo-despesas");
-    const resumoSaldo = document.getElementById("resumo-saldo");
-    const resumoSaldoChip = document.getElementById("resumo-saldo-chip");
-    const resumoPercentual = document.getElementById("resumo-percentual");
-    const resumoAlerta = document.getElementById("resumo-alerta");
-
-    const analiseResumo = document.getElementById("analise-resumo");
-    const analiseCategorias = document.getElementById("analise-categorias");
-    const insightDestaque = document.getElementById("insight-destaque");
-
-    const STORAGE_KEY = "planilha_inteligente_financeira_v1";
-
-    function formatCurrency(valor) {
-      return valor.toLocaleString("pt-BR", {
-        style: "currency",
-        currency: "BRL",
-        maximumFractionDigits: 2,
-      });
-    }
-
-    function parseValor(inputValue) {
-      if (!inputValue && inputValue !== 0) return 0;
-      const normalizado = String(inputValue).replace(".", "").replace(",", ".");
-      const parsed = parseFloat(normalizado);
-      return isNaN(parsed) ? 0 : parsed;
-    }
-
-    function salvarEstado() {
-      const renda = parseValor(rendaInput.value);
-
-      const gastos = [];
-      const linhas = listaGastos.querySelectorAll(".gasto-row");
-      linhas.forEach((linha) => {
-        const categoria = linha.querySelector(".gasto-categoria").value;
-        const descricao = linha.querySelector(".gasto-descricao").value;
-        const valor = parseValor(linha.querySelector(".gasto-valor").value);
-
-        if (valor > 0 && categoria) {
-          gastos.push({ categoria, descricao, valor });
-        }
-      });
-
-      const estado = { renda, gastos };
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(estado));
-
-      atualizarResumo(estado);
-      atualizarAnalise(estado);
-    }
-
-    function carregarEstado() {
-      const salvo = localStorage.getItem(STORAGE_KEY);
-      if (!salvo) {
-        adicionarLinhaGasto();
-        return;
-      }
-
-      try {
-        const estado = JSON.parse(salvo);
-        if (estado.renda) {
-          rendaInput.value = estado.renda;
-        }
-
-        listaGastos.innerHTML = "";
-
-        if (Array.isArray(estado.gastos) && estado.gastos.length) {
-          estado.gastos.forEach((g) => adicionarLinhaGasto(g));
-        } else {
-          adicionarLinhaGasto();
-        }
-
-        atualizarResumo(estado);
-        atualizarAnalise(estado);
-      } catch (e) {
-        console.error("Erro ao carregar estado:", e);
-        adicionarLinhaGasto();
-      }
-    }
-
-    function adicionarLinhaGasto(dados = {}) {
-      const row = document.createElement("div");
-      row.className = "gasto-row";
-
-      const select = document.createElement("select");
-      select.className = "gasto-categoria";
-      categoriasPadrao.forEach((cat) => {
-        const opt = document.createElement("option");
-        opt.value = cat;
-        opt.textContent = cat;
-        select.appendChild(opt);
-      });
-
-      if (dados.categoria) {
-        select.value = dados.categoria;
-      }
-
-      const inputDesc = document.createElement("input");
-      inputDesc.type = "text";
-      inputDesc.placeholder = "Descrição (opcional)";
-      inputDesc.className = "gasto-descricao";
-      inputDesc.value = dados.descricao || "";
-
-      const inputValor = document.createElement("input");
-      inputValor.type = "number";
-      inputValor.min = "0";
-      inputValor.step = "0.01";
-      inputValor.placeholder = "Valor (R$)";
-      inputValor.className = "gasto-valor";
-      inputValor.value = dados.valor != null ? dados.valor : "";
-
-      const btnRemover = document.createElement("button");
-      btnRemover.type = "button";
-      btnRemover.className = "btn btn-ghost btn-icon";
-      btnRemover.textContent = "–";
-
-      btnRemover.addEventListener("click", () => {
-        row.remove();
-        salvarEstado();
-      });
-
-      [select, inputDesc, inputValor].forEach((el) => {
-        el.addEventListener("input", salvarEstado);
-        el.addEventListener("change", salvarEstado);
-      });
-
-      row.appendChild(select);
-      row.appendChild(inputDesc);
-      row.appendChild(inputValor);
-      row.appendChild(btnRemover);
-
-      listaGastos.appendChild(row);
-    }
-
-    function atualizarResumo(estado) {
-      const renda = estado.renda || 0;
-      const totalDespesas = (estado.gastos || []).reduce(
-        (acc, g) => acc + (g.valor || 0),
-        0
-      );
-      const saldo = renda - totalDespesas;
-      const percentual = renda > 0 ? (totalDespesas / renda) * 100 : 0;
-
-      resumoRenda.textContent = formatCurrency(renda);
-      resumoDespesas.textContent = formatCurrency(totalDespesas);
-      resumoSaldo.textContent = formatCurrency(saldo);
-      resumoPercentual.textContent = `${percentual.toFixed(0)}%`;
-
-      resumoSaldoChip.classList.remove("chip-danger", "chip-success", "chip-warning");
-
-      if (renda === 0 && totalDespesas === 0) {
-        resumoSaldoChip.textContent = "Preencha sua renda";
-        resumoAlerta.textContent = "Comece informando quanto entra por mês.";
-        resumoSaldoChip.classList.add("chip-warning");
-        return;
-      }
-
-      if (saldo < 0) {
-        resumoSaldoChip.textContent = "No vermelho";
-        resumoSaldoChip.classList.add("chip-danger");
-        resumoAlerta.textContent =
-          "Suas despesas estão acima da renda. Priorize cortar gastos não essenciais.";
-      } else if (percentual > 80) {
-        resumoSaldoChip.textContent = "Zona de atenção";
-        resumoSaldoChip.classList.add("chip-warning");
-        resumoAlerta.textContent =
-          "Mais de 80% da renda em despesas. Busque reduzir dívidas e supérfluos.";
-      } else if (percentual > 60) {
-        resumoSaldoChip.textContent = "Aperto moderado";
-        resumoSaldoChip.classList.add("chip-warning");
-        resumoAlerta.textContent =
-          "Acima de 60%. Tente aproximar as despesas essenciais de 50% da renda.";
-      } else {
-        resumoSaldoChip.textContent = "Equilíbrio";
-        resumoSaldoChip.classList.add("chip-success");
-        resumoAlerta.textContent =
-          "Boa! Tente aumentar o que vai para investimentos e reserva.";
-      }
-    }
-
-    function atualizarAnalise(estado) {
-      const gastos = estado.gastos || [];
-      analiseCategorias.innerHTML = "";
-
-      if (!gastos.length) {
-        analiseResumo.textContent =
-          "Sem gastos cadastrados ainda. Adicione pelo menos um para ver a análise.";
-        insightDestaque.textContent = "";
-        return;
-      }
-
-      const totalDespesas = gastos.reduce((acc, g) => acc + (g.valor || 0), 0);
-      const porCategoria = {};
-      gastos.forEach((g) => {
-        if (!porCategoria[g.categoria]) porCategoria[g.categoria] = 0;
-        porCategoria[g.categoria] += g.valor || 0;
-      });
-
-      const categoriasOrdenadas = Object.entries(porCategoria).sort(
-        (a, b) => b[1] - a[1]
-      );
-
-      const categoriaTop = categoriasOrdenadas[0];
-      const maiorValor = categoriaTop ? categoriaTop[1] : 0;
-
-      analiseResumo.textContent = `Você cadastrou ${
-        gastos.length
-      } gasto(s) em ${categoriasOrdenadas.length} categoria(s). Total analisado: ${formatCurrency(
-        totalDespesas
-      )}.`;
-
-      categoriasOrdenadas.forEach(([categoria, valor]) => {
-        const percentual = totalDespesas ? (valor / totalDespesas) * 100 : 0;
-        const item = document.createElement("div");
-        item.className = "categoria-item";
-
-        const top = document.createElement("div");
-        top.className = "categoria-top";
-
-        const nome = document.createElement("span");
-        nome.className = "categoria-nome";
-        nome.textContent = categoria;
-
-        const perc = document.createElement("span");
-        perc.className = "categoria-percentual";
-        perc.textContent = `${formatCurrency(valor)} • ${percentual.toFixed(1)}%`;
-
-        top.appendChild(nome);
-        top.appendChild(perc);
-
-        const barraExt = document.createElement("div");
-        barraExt.className = "barra-externa";
-
-        const barraInt = document.createElement("div");
-        barraInt.className = "barra-interna";
-
-        const escala =
-          maiorValor > 0 ? Math.max(0.05, valor / maiorValor) : 0;
-
-        requestAnimationFrame(() => {
-          barraInt.style.transform = `scaleX(${escala})`;
-        });
-
-        barraExt.appendChild(barraInt);
-
-        item.appendChild(top);
-        item.appendChild(barraExt);
-
-        analiseCategorias.appendChild(item);
-      });
-
-      if (categoriaTop) {
-        const [nomeTop, valorTop] = categoriaTop;
-        const percTop = totalDespesas ? (valorTop / totalDespesas) * 100 : 0;
-
-        insightDestaque.innerHTML = `
-          <span class="insight-highlight">Ponto de atenção:</span>
-          sua maior categoria hoje é <strong>${nomeTop}</strong>, que consome cerca de 
-          <strong>${percTop.toFixed(1)}%</strong> de todos os gastos do mês. 
-          Avalie se esse nível faz sentido para sua realidade e objetivos.
-        `;
-      } else {
-        insightDestaque.textContent = "";
-      }
-    }
-
-    rendaInput.addEventListener("input", salvarEstado);
-    rendaInput.addEventListener("change", salvarEstado);
-
-    btnAddGasto.addEventListener("click", () => {
-      adicionarLinhaGasto();
-      salvarEstado();
-    });
-
-    btnLimpar.addEventListener("click", () => {
-      if (!confirm("Tem certeza que deseja apagar todos os dados desta planilha?")) {
-        return;
-      }
-      localStorage.removeItem(STORAGE_KEY);
-      rendaInput.value = "";
-      listaGastos.innerHTML = "";
-      adicionarLinhaGasto();
-      salvarEstado();
-    });
-
-    carregarEstado();
-  </script>
 </body>
 </html>
