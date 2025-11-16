@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Planilha Financeira Inteligente</title>
+  <style>
+    :root {
+      --bg: #020617;
+      --card: #0f172a;
+      --card-soft: #020617;
+      --stroke: #1e293b;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --accent: #38bdf8;
+      --danger: #f97373;
+      --success: #4ade80;
+      --warning: #facc15;
+      --radius-lg: 18px;
+      --radius-md: 12px;
+      --shadow-soft: 0 18px 40px rgba(15, 23, 42, 0.8);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Segoe UI", sans-serif;
+    }
+
+    body {
+      background: radial-gradient(circle at top, #1e293b 0, #020617 55%);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    .app {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 16px 16px 32px;
+    }
+
+    header {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(148, 163, 184, 0.08);
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      width: fit-content;
+    }
+
+    .badge-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 30%, #f9a8d4, #38bdf8);
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.7);
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      font-weight: 600;
+      letter-spacing: -0.03em;
+    }
+
+    h1 span {
+      background: linear-gradient(to right, #38bdf8, #a855f7);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .subtitle {
+      font-size: 0.9rem;
+      color: var(--muted);
+      max-width: 520px;
+    }
+
+    main {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1.1fr 1.3fr;
+      gap: 16px;
+    }
+
+    @media (max-width: 800px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: radial-gradient(circle at top left, #020617, #020617 55%);
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      padding: 16px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .card-title {
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    .card-subtitle {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .pill {
+      font-size: 0.7rem;
+      padding: 4px 9px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      color: var(--muted);
+    }
+
+    /* Resumo */
+    .resumo-cards {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    @media (max-width: 800px) {
+      .resumo-cards {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    .resumo-card {
+      background: linear-gradient(145deg, #020617, #020617);
+      border-radius: var(--radius-md);
+      padding: 10px;
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .resumo-label {
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    .resumo-valor {
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    .resumo-extra {
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    .chip {
+      font-size: 0.68rem;
+      padding: 2px 7px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      align-self: flex-start;
+    }
+
+    .chip-danger {
+      border-color: rgba(248, 113, 113, 0.7);
+      color: #fecaca;
+    }
+
+    .chip-success {
+      border-color: rgba(74, 222, 128, 0.7);
+      color: #bbf7d0;
+    }
+
+    .chip-warning {
+      border-color: rgba(250, 204, 21, 0.7);
+      color: #fef9c3;
+    }
+
+    /* Formulários */
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-bottom: 10px;
+    }
+
+    label {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    input,
+    select {
+      background: rgba(15, 23, 42, 0.9);
+      border-radius: 999px;
+      border: 1px solid var(--stroke);
+      padding: 8px 10px;
+      color: var(--text);
+      font-size: 0.9rem;
+      outline: none;
+      width: 100%;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.4);
+    }
+
+    .linha {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .linha > * {
+      flex: 1 1 0;
+      min-width: 80px;
+    }
+
+    .btn {
+      border-radius: 999px;
+      border: none;
+      padding: 8px 12px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: transform 0.08s ease, box-shadow 0.08s ease, background 0.08s ease;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #38bdf8, #6366f1);
+      color: #0b1120;
+      box-shadow: 0 12px 30px rgba(56, 189, 248, 0.4);
+    }
+
+    .btn-primary:active {
+      transform: translateY(1px);
+      box-shadow: 0 6px 16px rgba(56, 189, 248, 0.35);
+    }
+
+    .btn-ghost {
+      background: rgba(15, 23, 42, 0.8);
+      color: var(--muted);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+    }
+
+    .btn-ghost:active {
+      transform: translateY(1px);
+    }
+
+    .btn-icon {
+      width: 30px;
+      padding: 0;
+      border-radius: 999px;
+      font-size: 0.8rem;
+    }
+
+    .gastos-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      gap: 8px;
+    }
+
+    .gastos-lista {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      max-height: 260px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .gasto-row {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      background: rgba(15, 23, 42, 0.8);
+      border-radius: var(--radius-md);
+      padding: 6px;
+      border: 1px solid rgba(30, 64, 175, 0.7);
+    }
+
+    .gasto-row select,
+    .gasto-row input {
+      border-radius: 999px;
+      padding: 6px 8px;
+      font-size: 0.8rem;
+    }
+
+    .gasto-row small {
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    /* Análise */
+    .analise-resumo {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .categoria-item {
+      margin-bottom: 8px;
+    }
+
+    .categoria-top {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      margin-bottom: 4px;
+    }
+
+    .categoria-nome {
+      color: #e5e7eb;
+    }
+
+    .categoria-percentual {
+      color: var(--muted);
+    }
+
+    .barra-externa {
+      width: 100%;
+      height: 7px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 1);
+      border: 1px solid rgba(30, 64, 175, 0.9);
+      overflow: hidden;
+    }
+
+    .barra-interna {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #38bdf8, #a855f7);
+      transform-origin: left;
+      transform: scaleX(0);
+      transition: transform 0.25s ease-out;
+    }
+
+    .insights {
+      font-size: 0.8rem;
+      color: var(--muted);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .insight-highlight {
+      color: #e5e7eb;
+    }
+
+    .divider {
+      height: 1px;
+      border: none;
+      background: radial-gradient(circle at left, rgba(148, 163, 184, 0.5), rgba(15, 23, 42, 0));
+      margin: 10px 0;
+    }
+
+    .footer {
+      margin-top: 16px;
+      font-size: 0.7rem;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div class="badge">
+        <div class="badge-dot"></div>
+        Planilha Financeira Inteligente • Beta 1.0
+      </div>
+      <h1>
+        Organize seu dinheiro em segundos<br />
+        com uma <span>planilha viva</span> direto no navegador.
+      </h1>
+      <p class="subtitle">
+        Preencha sua renda, cadastre seus gastos e veja na hora para onde o dinheiro está indo,
+        onde você está exagerando e quanto poderia sobrar todo mês.
+      </p>
+    </header>
+
+    <main>
+      <section class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Resumo financeiro</div>
+            <div class="card-subtitle">Tudo o que importa em uma foto rápida do mês.</div>
+          </div>
+          <span class="pill">Dados salvos no seu dispositivo</span>
+        </div>
+
+        <div class="resumo-cards">
+          <div class="resumo-card">
+            <span class="resumo-label">Renda mensal</span>
+            <span id="resumo-renda" class="resumo-valor">R$ 0,00</span>
+            <span class="resumo-extra">O quanto entra todo mês</span>
+          </div>
+
+          <div class="resumo-card">
+            <span class="resumo-label">Total de despesas</span>
+            <span id="resumo-despesas" class="resumo-valor">R$ 0,00</span>
+            <span class="resumo-extra">Soma de todos os gastos</span>
+          </div>
+
+          <div class="resumo-card">
+            <span class="resumo-label">Saldo do mês</span>
+            <span id="resumo-saldo" class="resumo-valor">R$ 0,00</span>
+            <span id="resumo-saldo-chip" class="chip chip-success">Equilibrado</span>
+          </div>
+
+          <div class="resumo-card">
+            <span class="resumo-label">% da renda comprometida</span>
+            <span id="resumo-percentual" class="resumo-valor">0%</span>
+            <span id="resumo-alerta" class="resumo-extra">Abaixo de 50% costuma ser saudável.</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="grid">
+        <!-- Coluna esquerda: entrada de dados -->
+        <section class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Entrada de dados</div>
+              <div class="card-subtitle">Renda + gastos organizados por categoria.</div>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label for="renda-mensal">Renda mensal total (R$)</label>
+            <input
+              id="renda-mensal"
+              type="number"
+              min="0"
+              step="0.01"
+              placeholder="Ex.: 2500"
+            />
+          </div>
+
+          <hr class="divider" />
+
+          <div class="gastos-header">
+            <div>
+              <div class="card-title" style="font-size:0.85rem;">Gastos do mês</div>
+              <div class="card-subtitle">Adicione tudo: fixo, variável, cartão, extras…</div>
+            </div>
+            <button id="btn-add-gasto" class="btn btn-primary" type="button">
+              + Adicionar gasto
+            </button>
+          </div>
+
+          <div id="lista-gastos" class="gastos-lista"></div>
+
+          <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap;">
+            <button id="btn-limpar" class="btn btn-ghost" type="button">
+              Limpar tudo
+            </button>
+          </div>
+        </section>
+
+        <!-- Coluna direita: análise -->
+        <section class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Análise inteligente</div>
+              <div class="card-subtitle">Descubra onde o dinheiro está indo de verdade.</div>
+            </div>
+          </div>
+
+          <p id="analise-resumo" class="analise-resumo">
+            Preencha os gastos para ver o raio-x das categorias.
+          </p>
+
+          <div id="analise-categorias"></div>
+
+          <hr class="divider" />
+
+          <div class="insights">
+            <div>
+              <span class="insight-highlight">Dica:</span>
+              tente manter despesas essenciais até ~50% da renda
+              (moradia, alimentação, transporte) e destinar pelo menos
+              10–20% para investimentos e reserva.
+            </div>
+            <div id="insight-destaque"></div>
+          </div>
+        </section>
+      </section>
+
+      <section class="footer">
+        <span>Seus dados ficam apenas neste dispositivo (localStorage).</span>
+        <span>Versão Beta – criada para ser publicada em GitHub Pages.</span>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const categoriasPadrao = [
+      "Moradia",
+      "Alimentação",
+      "Transporte",
+      "Dívidas",
+      "Lazer",
+      "Saúde",
+      "Educação",
+      "Investimentos",
+      "Reserva de Emergência",
+      "Outros",
+    ];
+
+    const rendaInput = document.getElementById("renda-mensal");
+    const listaGastos = document.getElementById("lista-gastos");
+    const btnAddGasto = document.getElementById("btn-add-gasto");
+    const btnLimpar = document.getElementById("btn-limpar");
+
+    const resumoRenda = document.getElementById("resumo-renda");
+    const resumoDespesas = document.getElementById("resumo-despesas");
+    const resumoSaldo = document.getElementById("resumo-saldo");
+    const resumoSaldoChip = document.getElementById("resumo-saldo-chip");
+    const resumoPercentual = document.getElementById("resumo-percentual");
+    const resumoAlerta = document.getElementById("resumo-alerta");
+
+    const analiseResumo = document.getElementById("analise-resumo");
+    const analiseCategorias = document.getElementById("analise-categorias");
+    const insightDestaque = document.getElementById("insight-destaque");
+
+    const STORAGE_KEY = "planilha_inteligente_financeira_v1";
+
+    function formatCurrency(valor) {
+      return valor.toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+        maximumFractionDigits: 2,
+      });
+    }
+
+    function parseValor(inputValue) {
+      if (!inputValue && inputValue !== 0) return 0;
+      const normalizado = String(inputValue).replace(".", "").replace(",", ".");
+      const parsed = parseFloat(normalizado);
+      return isNaN(parsed) ? 0 : parsed;
+    }
+
+    function salvarEstado() {
+      const renda = parseValor(rendaInput.value);
+
+      const gastos = [];
+      const linhas = listaGastos.querySelectorAll(".gasto-row");
+      linhas.forEach((linha) => {
+        const categoria = linha.querySelector(".gasto-categoria").value;
+        const descricao = linha.querySelector(".gasto-descricao").value;
+        const valor = parseValor(linha.querySelector(".gasto-valor").value);
+
+        if (valor > 0 && categoria) {
+          gastos.push({ categoria, descricao, valor });
+        }
+      });
+
+      const estado = { renda, gastos };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(estado));
+
+      atualizarResumo(estado);
+      atualizarAnalise(estado);
+    }
+
+    function carregarEstado() {
+      const salvo = localStorage.getItem(STORAGE_KEY);
+      if (!salvo) {
+        adicionarLinhaGasto();
+        return;
+      }
+
+      try {
+        const estado = JSON.parse(salvo);
+        if (estado.renda) {
+          rendaInput.value = estado.renda;
+        }
+
+        listaGastos.innerHTML = "";
+
+        if (Array.isArray(estado.gastos) && estado.gastos.length) {
+          estado.gastos.forEach((g) => adicionarLinhaGasto(g));
+        } else {
+          adicionarLinhaGasto();
+        }
+
+        atualizarResumo(estado);
+        atualizarAnalise(estado);
+      } catch (e) {
+        console.error("Erro ao carregar estado:", e);
+        adicionarLinhaGasto();
+      }
+    }
+
+    function adicionarLinhaGasto(dados = {}) {
+      const row = document.createElement("div");
+      row.className = "gasto-row";
+
+      const select = document.createElement("select");
+      select.className = "gasto-categoria";
+      categoriasPadrao.forEach((cat) => {
+        const opt = document.createElement("option");
+        opt.value = cat;
+        opt.textContent = cat;
+        select.appendChild(opt);
+      });
+
+      if (dados.categoria) {
+        select.value = dados.categoria;
+      }
+
+      const inputDesc = document.createElement("input");
+      inputDesc.type = "text";
+      inputDesc.placeholder = "Descrição (opcional)";
+      inputDesc.className = "gasto-descricao";
+      inputDesc.value = dados.descricao || "";
+
+      const inputValor = document.createElement("input");
+      inputValor.type = "number";
+      inputValor.min = "0";
+      inputValor.step = "0.01";
+      inputValor.placeholder = "Valor (R$)";
+      inputValor.className = "gasto-valor";
+      inputValor.value = dados.valor != null ? dados.valor : "";
+
+      const btnRemover = document.createElement("button");
+      btnRemover.type = "button";
+      btnRemover.className = "btn btn-ghost btn-icon";
+      btnRemover.textContent = "–";
+
+      btnRemover.addEventListener("click", () => {
+        row.remove();
+        salvarEstado();
+      });
+
+      [select, inputDesc, inputValor].forEach((el) => {
+        el.addEventListener("input", salvarEstado);
+        el.addEventListener("change", salvarEstado);
+      });
+
+      row.appendChild(select);
+      row.appendChild(inputDesc);
+      row.appendChild(inputValor);
+      row.appendChild(btnRemover);
+
+      listaGastos.appendChild(row);
+    }
+
+    function atualizarResumo(estado) {
+      const renda = estado.renda || 0;
+      const totalDespesas = (estado.gastos || []).reduce(
+        (acc, g) => acc + (g.valor || 0),
+        0
+      );
+      const saldo = renda - totalDespesas;
+      const percentual = renda > 0 ? (totalDespesas / renda) * 100 : 0;
+
+      resumoRenda.textContent = formatCurrency(renda);
+      resumoDespesas.textContent = formatCurrency(totalDespesas);
+      resumoSaldo.textContent = formatCurrency(saldo);
+      resumoPercentual.textContent = `${percentual.toFixed(0)}%`;
+
+      resumoSaldoChip.classList.remove("chip-danger", "chip-success", "chip-warning");
+
+      if (renda === 0 && totalDespesas === 0) {
+        resumoSaldoChip.textContent = "Preencha sua renda";
+        resumoAlerta.textContent = "Comece informando quanto entra por mês.";
+        resumoSaldoChip.classList.add("chip-warning");
+        return;
+      }
+
+      if (saldo < 0) {
+        resumoSaldoChip.textContent = "No vermelho";
+        resumoSaldoChip.classList.add("chip-danger");
+        resumoAlerta.textContent =
+          "Suas despesas estão acima da renda. Priorize cortar gastos não essenciais.";
+      } else if (percentual > 80) {
+        resumoSaldoChip.textContent = "Zona de atenção";
+        resumoSaldoChip.classList.add("chip-warning");
+        resumoAlerta.textContent =
+          "Mais de 80% da renda em despesas. Busque reduzir dívidas e supérfluos.";
+      } else if (percentual > 60) {
+        resumoSaldoChip.textContent = "Aperto moderado";
+        resumoSaldoChip.classList.add("chip-warning");
+        resumoAlerta.textContent =
+          "Acima de 60%. Tente aproximar as despesas essenciais de 50% da renda.";
+      } else {
+        resumoSaldoChip.textContent = "Equilíbrio";
+        resumoSaldoChip.classList.add("chip-success");
+        resumoAlerta.textContent =
+          "Boa! Tente aumentar o que vai para investimentos e reserva.";
+      }
+    }
+
+    function atualizarAnalise(estado) {
+      const gastos = estado.gastos || [];
+      analiseCategorias.innerHTML = "";
+
+      if (!gastos.length) {
+        analiseResumo.textContent =
+          "Sem gastos cadastrados ainda. Adicione pelo menos um para ver a análise.";
+        insightDestaque.textContent = "";
+        return;
+      }
+
+      const totalDespesas = gastos.reduce((acc, g) => acc + (g.valor || 0), 0);
+      const porCategoria = {};
+      gastos.forEach((g) => {
+        if (!porCategoria[g.categoria]) porCategoria[g.categoria] = 0;
+        porCategoria[g.categoria] += g.valor || 0;
+      });
+
+      const categoriasOrdenadas = Object.entries(porCategoria).sort(
+        (a, b) => b[1] - a[1]
+      );
+
+      const categoriaTop = categoriasOrdenadas[0];
+      const maiorValor = categoriaTop ? categoriaTop[1] : 0;
+
+      analiseResumo.textContent = `Você cadastrou ${
+        gastos.length
+      } gasto(s) em ${categoriasOrdenadas.length} categoria(s). Total analisado: ${formatCurrency(
+        totalDespesas
+      )}.`;
+
+      categoriasOrdenadas.forEach(([categoria, valor]) => {
+        const percentual = totalDespesas ? (valor / totalDespesas) * 100 : 0;
+        const item = document.createElement("div");
+        item.className = "categoria-item";
+
+        const top = document.createElement("div");
+        top.className = "categoria-top";
+
+        const nome = document.createElement("span");
+        nome.className = "categoria-nome";
+        nome.textContent = categoria;
+
+        const perc = document.createElement("span");
+        perc.className = "categoria-percentual";
+        perc.textContent = `${formatCurrency(valor)} • ${percentual.toFixed(1)}%`;
+
+        top.appendChild(nome);
+        top.appendChild(perc);
+
+        const barraExt = document.createElement("div");
+        barraExt.className = "barra-externa";
+
+        const barraInt = document.createElement("div");
+        barraInt.className = "barra-interna";
+
+        const escala =
+          maiorValor > 0 ? Math.max(0.05, valor / maiorValor) : 0;
+
+        requestAnimationFrame(() => {
+          barraInt.style.transform = `scaleX(${escala})`;
+        });
+
+        barraExt.appendChild(barraInt);
+
+        item.appendChild(top);
+        item.appendChild(barraExt);
+
+        analiseCategorias.appendChild(item);
+      });
+
+      if (categoriaTop) {
+        const [nomeTop, valorTop] = categoriaTop;
+        const percTop = totalDespesas ? (valorTop / totalDespesas) * 100 : 0;
+
+        insightDestaque.innerHTML = `
+          <span class="insight-highlight">Ponto de atenção:</span>
+          sua maior categoria hoje é <strong>${nomeTop}</strong>, que consome cerca de 
+          <strong>${percTop.toFixed(1)}%</strong> de todos os gastos do mês. 
+          Avalie se esse nível faz sentido para sua realidade e objetivos.
+        `;
+      } else {
+        insightDestaque.textContent = "";
+      }
+    }
+
+    rendaInput.addEventListener("input", salvarEstado);
+    rendaInput.addEventListener("change", salvarEstado);
+
+    btnAddGasto.addEventListener("click", () => {
+      adicionarLinhaGasto();
+      salvarEstado();
+    });
+
+    btnLimpar.addEventListener("click", () => {
+      if (!confirm("Tem certeza que deseja apagar todos os dados desta planilha?")) {
+        return;
+      }
+      localStorage.removeItem(STORAGE_KEY);
+      rendaInput.value = "";
+      listaGastos.innerHTML = "";
+      adicionarLinhaGasto();
+      salvarEstado();
+    });
+
+    carregarEstado();
+  </script>
+</body>
+</html>
