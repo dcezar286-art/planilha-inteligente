@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>App PRO – Planilha Financeira Inteligente 360º</title>
 
-  <meta name="description" content="Versão PRO da Planilha Financeira Inteligente 360º: controle completo de renda, gastos, compras parceladas e calendário dos próximos 12 meses.">
+  <meta name="description" content="Versão PRO da Planilha Financeira Inteligente 360º: controle completo de renda, gastos, compras parceladas com data de vencimento e calendário dos próximos 12 meses.">
 
   <style>
     :root {
@@ -24,7 +24,7 @@
       --shadow-soft:0 18px 40px rgba(15, 23, 42, 0.8);
     }
 
-    * {
+    *{
       box-sizing:border-box;
       margin:0;
       padding:0;
@@ -255,17 +255,6 @@
     input:focus,select:focus{
       border-color:var(--accent);
       box-shadow:0 0 0 1px rgba(56,189,248,0.4);
-    }
-
-    .linha{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-    }
-
-    .linha>*{
-      flex:1 1 0;
-      min-width:80px;
     }
 
     .btn{
@@ -505,8 +494,8 @@
         com uma <span>planilha viva PRO</span> direto do navegador.
       </h1>
       <p class="subtitle">
-        Aqui você tem tudo liberado: renda, gastos por categoria, compras parceladas e um calendário
-        dos próximos 12 meses mostrando exatamente quando o peso das parcelas começa a diminuir.
+        Aqui você tem tudo liberado: renda, gastos por categoria, compras parceladas com data de vencimento
+        e um calendário dos próximos 12 meses mostrando exatamente quando o peso das parcelas começa a cair.
       </p>
     </header>
 
@@ -555,7 +544,9 @@
           <div class="card-header">
             <div>
               <div class="card-title">Entrada de dados</div>
-              <div class="card-subtitle">Renda + gastos por tipo e categoria, incluindo parcelas.</div>
+              <div class="card-subtitle">
+                Renda + gastos por tipo e categoria, incluindo compras parceladas com quantidade e data de vencimento.
+              </div>
             </div>
           </div>
 
@@ -576,7 +567,7 @@
             <div>
               <div class="card-title" style="font-size:0.85rem;">Gastos do mês</div>
               <div class="card-subtitle">
-                Adicione fixos, variáveis e compras parceladas com quantidade de parcelas restantes.
+                Adicione fixos, variáveis e compras parceladas. Nas parcelas, informe a data de vencimento.
               </div>
             </div>
             <button id="btn-add-gasto" class="btn btn-primary" type="button">
@@ -629,14 +620,15 @@
           <div>
             <div class="card-title">Calendário de parcelas (próximos 12 meses)</div>
             <div class="card-subtitle">
-              Veja quanto da sua renda está preso em compras parceladas e quando esse peso começa a diminuir.
+              Com base na data de vencimento das parcelas, veja quanto da sua renda está preso
+              a cada mês e quando esse peso começa a diminuir.
             </div>
           </div>
         </div>
 
         <div id="calendario-parcelas-wrapper">
           <p id="calendario-vazio" class="cal-sub">
-            Nenhuma compra parcelada cadastrada ainda. Marque algum gasto como “Parcelado” para ver o calendário.
+            Nenhuma compra parcelada cadastrada ainda. Marque algum gasto como “Parcelado” e informe a data de vencimento.
           </p>
           <div id="calendario-resumo" class="cal-sub" style="display:none;"></div>
           <div id="cal-grid" class="cal-grid" style="display:none;"></div>
@@ -688,24 +680,24 @@
     const calGrid = document.getElementById("cal-grid");
 
     // chave separada da versão FREE
-    const STORAGE_KEY = "planilha_inteligente_financeira_pro_v1";
+    const STORAGE_KEY = "planilha_inteligente_financeira_pro_v2";
 
-    function formatCurrency(valor) {
-      return valor.toLocaleString("pt-BR", {
-        style: "currency",
-        currency: "BRL",
-        maximumFractionDigits: 2,
+    function formatCurrency(valor){
+      return valor.toLocaleString("pt-BR",{
+        style:"currency",
+        currency:"BRL",
+        maximumFractionDigits:2,
       });
     }
 
-    function parseValor(inputValue) {
+    function parseValor(inputValue){
       if (!inputValue && inputValue !== 0) return 0;
       const normalizado = String(inputValue).replace(".", "").replace(",", ".");
       const parsed = parseFloat(normalizado);
       return isNaN(parsed) ? 0 : parsed;
     }
 
-    function salvarEstado() {
+    function salvarEstado(){
       const renda = parseValor(rendaInput.value);
 
       const gastos = [];
@@ -717,9 +709,11 @@
         const valor = parseValor(linha.querySelector(".gasto-valor").value);
         const parcelasInput = linha.querySelector(".gasto-parcelas");
         const parcelasRestantes = parcelasInput ? parseInt(parcelasInput.value) || 0 : 0;
+        const dataInput = linha.querySelector(".gasto-data");
+        const dataVencimento = dataInput ? dataInput.value || "" : "";
 
-        if (valor > 0 && categoria) {
-          gastos.push({ categoria, tipo, descricao, valor, parcelasRestantes });
+        if (valor > 0 && categoria){
+          gastos.push({ categoria, tipo, descricao, valor, parcelasRestantes, dataVencimento });
         }
       });
 
@@ -731,22 +725,22 @@
       atualizarCalendarioParcelas(estado);
     }
 
-    function carregarEstado() {
+    function carregarEstado(){
       const salvo = localStorage.getItem(STORAGE_KEY);
-      if (!salvo) {
+      if (!salvo){
         adicionarLinhaGasto();
         return;
       }
 
-      try {
+      try{
         const estado = JSON.parse(salvo);
-        if (estado.renda) {
+        if (estado.renda){
           rendaInput.value = estado.renda;
         }
 
         listaGastos.innerHTML = "";
 
-        if (Array.isArray(estado.gastos) && estado.gastos.length) {
+        if (Array.isArray(estado.gastos) && estado.gastos.length){
           estado.gastos.forEach((g) => adicionarLinhaGasto(g));
         } else {
           adicionarLinhaGasto();
@@ -755,20 +749,20 @@
         atualizarResumo(estado);
         atualizarAnalise(estado);
         atualizarCalendarioParcelas(estado);
-      } catch (e) {
+      } catch(e){
         console.error("Erro ao carregar estado:", e);
         adicionarLinhaGasto();
       }
     }
 
-    function criarOpcaoSelect(select, valor, texto) {
+    function criarOpcaoSelect(select, valor, texto){
       const opt = document.createElement("option");
       opt.value = valor;
       opt.textContent = texto;
       select.appendChild(opt);
     }
 
-    function adicionarLinhaGasto(dados = {}) {
+    function adicionarLinhaGasto(dados = {}){
       const row = document.createElement("div");
       row.className = "gasto-row";
 
@@ -795,7 +789,7 @@
       inputValor.type = "number";
       inputValor.min = "0";
       inputValor.step = "0.01";
-      inputValor.placeholder = "Valor mensal (R$)";
+      inputValor.placeholder = "Valor da parcela ou mensal (R$)";
       inputValor.className = "gasto-valor";
 
       // Parcelas restantes
@@ -806,9 +800,15 @@
       inputParcelas.placeholder = "Parcelas restantes";
       inputParcelas.className = "gasto-parcelas";
 
+      // Data de vencimento
+      const inputData = document.createElement("input");
+      inputData.type = "date";
+      inputData.className = "gasto-data";
+      inputData.title = "Data de vencimento da próxima parcela";
+
       const extraInfo = document.createElement("div");
       extraInfo.className = "gasto-extra-info";
-      extraInfo.textContent = "Para compras parceladas, informe o valor da parcela e quantas ainda faltam.";
+      extraInfo.textContent = "Para compras parceladas, informe o valor da parcela, quantas faltam e a data de vencimento da próxima parcela.";
 
       // Botão remover
       const btnRemover = document.createElement("button");
@@ -822,10 +822,12 @@
       inputDesc.value = dados.descricao || "";
       inputValor.value = dados.valor != null ? dados.valor : "";
       inputParcelas.value = dados.parcelasRestantes != null ? dados.parcelasRestantes : "";
+      inputData.value = dados.dataVencimento || "";
 
-      function atualizarVisibilidadeParcelas() {
+      function atualizarVisibilidadeParcelas(){
         const isParcelado = selectTipo.value === "Parcelado";
         inputParcelas.style.display = isParcelado ? "inline-block" : "none";
+        inputData.style.display = isParcelado ? "inline-block" : "none";
         extraInfo.style.display = isParcelado ? "block" : "none";
       }
       atualizarVisibilidadeParcelas();
@@ -835,7 +837,7 @@
         salvarEstado();
       });
 
-      [selectCategoria, selectTipo, inputDesc, inputValor, inputParcelas].forEach((el) => {
+      [selectCategoria, selectTipo, inputDesc, inputValor, inputParcelas, inputData].forEach((el) => {
         el.addEventListener("input", salvarEstado);
         el.addEventListener("change", () => {
           if (el === selectTipo) atualizarVisibilidadeParcelas();
@@ -848,13 +850,14 @@
       row.appendChild(inputDesc);
       row.appendChild(inputValor);
       row.appendChild(inputParcelas);
+      row.appendChild(inputData);
       row.appendChild(btnRemover);
       row.appendChild(extraInfo);
 
       listaGastos.appendChild(row);
     }
 
-    function atualizarResumo(estado) {
+    function atualizarResumo(estado){
       const renda = estado.renda || 0;
       const totalDespesas = (estado.gastos || []).reduce(
         (acc, g) => acc + (g.valor || 0),
@@ -870,24 +873,24 @@
 
       resumoSaldoChip.classList.remove("chip-danger", "chip-success", "chip-warning");
 
-      if (renda === 0 && totalDespesas === 0) {
+      if (renda === 0 && totalDespesas === 0){
         resumoSaldoChip.textContent = "Preencha sua renda";
         resumoAlerta.textContent = "Comece informando quanto entra por mês.";
         resumoSaldoChip.classList.add("chip-warning");
         return;
       }
 
-      if (saldo < 0) {
+      if (saldo < 0){
         resumoSaldoChip.textContent = "No vermelho";
         resumoSaldoChip.classList.add("chip-danger");
         resumoAlerta.textContent =
           "Suas despesas estão acima da renda. Priorize cortar gastos não essenciais.";
-      } else if (percentual > 80) {
+      } else if (percentual > 80){
         resumoSaldoChip.textContent = "Zona de atenção";
         resumoSaldoChip.classList.add("chip-warning");
         resumoAlerta.textContent =
           "Mais de 80% da renda em despesas. Busque reduzir dívidas e supérfluos.";
-      } else if (percentual > 60) {
+      } else if (percentual > 60){
         resumoSaldoChip.textContent = "Aperto moderado";
         resumoSaldoChip.classList.add("chip-warning");
         resumoAlerta.textContent =
@@ -900,13 +903,13 @@
       }
     }
 
-    function atualizarAnalise(estado) {
+    function atualizarAnalise(estado){
       const gastos = estado.gastos || [];
       analiseCategorias.innerHTML = "";
       insightDestaque.textContent = "";
       insightParcelas.textContent = "";
 
-      if (!gastos.length) {
+      if (!gastos.length){
         analiseResumo.textContent =
           "Sem gastos cadastrados ainda. Adicione pelo menos um para ver a análise.";
         return;
@@ -957,8 +960,7 @@
         const barraInt = document.createElement("div");
         barraInt.className = "barra-interna";
 
-        const escala =
-          maiorValor > 0 ? Math.max(0.05, valor / maiorValor) : 0;
+        const escala = maiorValor > 0 ? Math.max(0.05, valor / maiorValor) : 0;
 
         requestAnimationFrame(() => {
           barraInt.style.transform = `scaleX(${escala})`;
@@ -972,7 +974,7 @@
         analiseCategorias.appendChild(item);
       });
 
-      if (categoriaTop) {
+      if (categoriaTop){
         const [nomeTop, valorTop] = categoriaTop;
         const percTop = totalDespesas ? (valorTop / totalDespesas) * 100 : 0;
 
@@ -984,8 +986,10 @@
         `;
       }
 
-      const apenasParcelados = gastos.filter(g => g.tipo === "Parcelado" && g.parcelasRestantes > 0);
-      if (apenasParcelados.length) {
+      const apenasParcelados = gastos.filter(
+        g => g.tipo === "Parcelado" && g.parcelasRestantes > 0
+      );
+      if (apenasParcelados.length){
         const totalParcelasMes = apenasParcelados.reduce((acc, g) => acc + (g.valor || 0), 0);
         const totalParcelasFuturas = apenasParcelados.reduce(
           (acc, g) => acc + (g.valor || 0) * (g.parcelasRestantes || 0),
@@ -1001,13 +1005,15 @@
       }
     }
 
-    function atualizarCalendarioParcelas(estado) {
+    function atualizarCalendarioParcelas(estado){
       const gastos = estado.gastos || [];
-      const apenasParcelados = gastos.filter(g => g.tipo === "Parcelado" && g.parcelasRestantes > 0);
+      const apenasParcelados = gastos.filter(
+        g => g.tipo === "Parcelado" && g.parcelasRestantes > 0
+      );
 
       calGrid.innerHTML = "";
 
-      if (!apenasParcelados.length) {
+      if (!apenasParcelados.length){
         calVazio.style.display = "block";
         calResumo.style.display = "none";
         calGrid.style.display = "none";
@@ -1026,7 +1032,7 @@
 
       calResumo.innerHTML = `
         Hoje você tem <strong>${apenasParcelados.length}</strong> compra(s) parcelada(s),
-        somando <strong>${formatCurrency(totalParcelasMes)}</strong> por mês.
+        somando <strong>${formatCurrency(totalParcelasMes)}</strong> em parcelas neste mês.
         Ao longo dos próximos meses, isso representa cerca de
         <strong>${formatCurrency(totalParcelasFuturas)}</strong> em parcelas futuras.
       `;
@@ -1037,12 +1043,40 @@
         "Jul", "Ago", "Set", "Out", "Nov", "Dez"
       ];
 
-      for (let m = 0; m < 12; m++) {
+      for (let m = 0; m < 12; m++){
         const dataMes = new Date(hoje.getFullYear(), hoje.getMonth() + m, 1);
         let totalMes = 0;
 
         apenasParcelados.forEach(g => {
-          if (m < (g.parcelasRestantes || 0)) {
+          if (!g.dataVencimento){
+            // Se não tiver data, mantemos a lógica antiga: começa agora
+            const idxInicio = 0;
+            if (m >= idxInicio && m < idxInicio + (g.parcelasRestantes || 0)){
+              totalMes += g.valor || 0;
+            }
+            return;
+          }
+
+          const dataVenc = new Date(g.dataVencimento + "T00:00:00");
+          if (isNaN(dataVenc.getTime())){
+            // data inválida, ignora data e usa padrão
+            const idxInicio = 0;
+            if (m >= idxInicio && m < idxInicio + (g.parcelasRestantes || 0)){
+              totalMes += g.valor || 0;
+            }
+            return;
+          }
+
+          // diferença de meses entre hoje e o vencimento da próxima parcela
+          const diffMeses =
+            (dataVenc.getFullYear() - hoje.getFullYear()) * 12 +
+            (dataVenc.getMonth() - hoje.getMonth());
+
+          // se diffMeses < 0, já está atrasada → consideramos começando no mês atual (0)
+          const inicio = Math.max(0, diffMeses);
+          const fim = inicio + (g.parcelasRestantes || 0);
+
+          if (m >= inicio && m < fim){
             totalMes += g.valor || 0;
           }
         });
@@ -1070,10 +1104,10 @@
 
         const note = document.createElement("div");
         note.className = "cal-note";
-        if (totalMes === 0) {
+        if (totalMes === 0){
           note.textContent = "Sem parcelas ativas neste mês.";
         } else {
-          note.textContent = "Valor em parcelas ainda ativas.";
+          note.textContent = "Valor em parcelas ainda ativas neste mês.";
         }
 
         card.appendChild(topo);
@@ -1093,7 +1127,7 @@
     });
 
     btnLimpar.addEventListener("click", () => {
-      if (!confirm("Tem certeza que deseja apagar todos os dados desta versão PRO?")) {
+      if (!confirm("Tem certeza que deseja apagar todos os dados desta versão PRO?")){
         return;
       }
       localStorage.removeItem(STORAGE_KEY);
