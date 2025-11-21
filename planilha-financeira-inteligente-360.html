@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Planilha Financeira Inteligente 360º – Organize Seu Dinheiro de Forma Simples</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- SEO -->
+  <meta name="description" content="Planilha Financeira Inteligente 360º: controle sua renda, gastos, dívidas e parcelas em uma única tela. Versão gratuita online e versão PRO com calendário de parcelas e análises avançadas." />
+  <meta name="keywords" content="planilha financeira inteligente, planilha para organizar finanças, controle financeiro mensal, planilha de gastos, controle de dívidas, planilha online grátis" />
+  <link rel="canonical" href="https://SEU-USUARIO.github.io/NOME-DO-REPO/planilha-financeira-inteligente-360.html" />
+
+  <!-- Open Graph (para quando você for divulgar) -->
+  <meta property="og:title" content="Planilha Financeira Inteligente 360º – Controle Total do Seu Dinheiro" />
+  <meta property="og:description" content="Saiba exatamente para onde está indo seu dinheiro. Versão gratuita e versão PRO com parcelas e calendário de 12 meses." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://SEU-USUARIO.github.io/NOME-DO-REPO/planilha-financeira-inteligente-360.html" />
+
+  <style>
+    :root{
+      --bg:#020617;
+      --bg-soft:#020617;
+      --card:#0f172a;
+      --accent:#38bdf8;
+      --accent-2:#6366f1;
+      --stroke:#1e293b;
+      --text:#e5e7eb;
+      --muted:#9ca3af;
+      --danger:#f97373;
+      --radius-lg:18px;
+      --radius-md:12px;
+      --shadow-soft:0 18px 40px rgba(15,23,42,0.85);
+      --max-width:1050px;
+    }
+
+    *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",sans-serif;
+    }
+
+    body{
+      min-height:100vh;
+      background:
+        radial-gradient(circle at top,#1e293b 0,#020617 55%);
+      color:var(--text);
+    }
+
+    .page{
+      max-width:var(--max-width);
+      margin:0 auto;
+      padding:18px 16px 40px;
+    }
+
+    a{
+      color:var(--accent);
+      text-decoration:none;
+    }
+
+    a:hover{
+      text-decoration:underline;
+    }
+
+    header{
+      margin-bottom:24px;
+    }
+
+    .top-nav{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      margin-bottom:14px;
+      flex-wrap:wrap;
+      font-size:0.82rem;
+      color:var(--muted);
+    }
+
+    .top-links{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .pill-nav{
+      padding:5px 10px;
+      border-radius:999px;
+      border:1px solid rgba(148,163,184,0.4);
+      background:rgba(15,23,42,0.8);
+    }
+
+    .logo{
+      font-size:0.9rem;
+      font-weight:500;
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+    }
+
+    .logo-dot{
+      width:8px;
+      height:8px;
+      border-radius:999px;
+      background:radial-gradient(circle at 30% 30%,#f9a8d4,#38bdf8);
+      box-shadow:0 0 12px rgba(56,189,248,0.7);
+    }
+
+    h1{
+      font-size:1.9rem;
+      letter-spacing:-0.04em;
+      font-weight:650;
+      margin-bottom:10px;
+    }
+
+    h1 span{
+      background:linear-gradient(to right,#38bdf8,#a855f7);
+      -webkit-background-clip:text;
+      color:transparent;
+    }
+
+    .hero-sub{
+      font-size:0.98rem;
+      color:var(--muted);
+      max-width:640px;
+      line-height:1.55;
+    }
+
+    .hero-grid{
+      display:grid;
+      grid-template-columns:1.4fr 1.1fr;
+      gap:18px;
+      margin-top:16px;
+    }
+
+    @media (max-width:850px){
+      .hero-grid{
+        grid-template-columns:1fr;
+      }
+    }
+
+    .card{
+      background:radial-gradient(circle at top left,#020617,#020617 55%);
+      border-radius:var(--radius-lg);
+      border:1px solid rgba(148,163,184,0.25);
+      padding:16px;
+      box-shadow:var(--shadow-soft);
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      font-size:0.75rem;
+      padding:4px 10px;
+      border-radius:999px;
+      background:rgba(15,23,42,0.95);
+      border:1px solid rgba(148,163,184,0.4);
+      margin-bottom:8px;
+    }
+
+    .hero-cta{
+      margin-top:14px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
+    }
+
+    .btn{
+      border-radius:999px;
+      border:none;
+      padding:9px 14px;
+      font-size:0.88rem;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:6px;
+      white-space:nowrap;
+      transition:transform 0.08s ease,box-shadow 0.08s ease,background 0.08s ease;
+    }
+
+    .btn-primary{
+      background:linear-gradient(135deg,var(--accent),var(--accent-2));
+      color:#0b1120;
+      box-shadow:0 14px 32px rgba(37,99,235,0.55);
+      font-weight:500;
+    }
+
+    .btn-primary:active{
+      transform:translateY(1px);
+      box-shadow:0 7px 18px rgba(37,99,235,0.5);
+    }
+
+    .btn-ghost{
+      background:rgba(15,23,42,0.9);
+      color:var(--muted);
+      border:1px solid rgba(148,163,184,0.5);
+    }
+
+    .btn-ghost:active{
+      transform:translateY(1px);
+    }
+
+    .hero-note{
+      font-size:0.78rem;
+      color:var(--muted);
+    }
+
+    .hero-highlight{
+      font-size:0.78rem;
+      color:#e5e7eb;
+    }
+
+    .mini-metric{
+      font-size:0.8rem;
+      color:var(--muted);
+      margin-top:10px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+    }
+
+    .mini-tag{
+      padding:4px 9px;
+      border-radius:999px;
+      border:1px solid rgba(148,163,184,0.35);
+    }
+
+    /* Blocos de conteúdo */
+    section{
+      margin-top:26px;
+    }
+
+    h2{
+      font-size:1.2rem;
+      margin-bottom:8px;
+      letter-spacing:-0.02em;
+    }
+
+    h3{
+      font-size:1rem;
+      margin-bottom:6px;
+    }
+
+    p{
+      font-size:0.9rem;
+      color:var(--muted);
+      line-height:1.6;
+      margin-bottom:6px;
+    }
+
+    ul{
+      padding-left:16px;
+      margin-bottom:8px;
+    }
+
+    li{
+      font-size:0.88rem;
+      color:var(--muted);
+      margin-bottom:3px;
+    }
+
+    .grid-2{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:16px;
+    }
+
+    @media (max-width:800px){
+      .grid-2{
+        grid-template-columns:1fr;
+      }
+    }
+
+    .feature-card{
+      background:rgba(15,23,42,0.95);
+      border-radius:var(--radius-md);
+      border:1px solid rgba(55,65,81,0.9);
+      padding:12px;
+    }
+
+    .feature-label{
+      font-size:0.8rem;
+      color:var(--muted);
+      margin-bottom:2px;
+    }
+
+    .feature-title{
+      font-size:0.95rem;
+      margin-bottom:4px;
+    }
+
+    .tag-free{
+      font-size:0.7rem;
+      padding:2px 7px;
+      border-radius:999px;
+      border:1px solid rgba(52,211,153,0.7);
+      color:#bbf7d0;
+    }
+
+    .tag-pro{
+      font-size:0.7rem;
+      padding:2px 7px;
+      border-radius:999px;
+      border:1px solid rgba(96,165,250,0.8);
+      color:#bfdbfe;
+    }
+
+    .faq-item{
+      margin-bottom:10px;
+      border-radius:var(--radius-md);
+      border:1px solid rgba(55,65,81,0.9);
+      background:rgba(15,23,42,0.95);
+      padding:10px;
+    }
+
+    .faq-q{
+      font-size:0.9rem;
+      font-weight:500;
+      margin-bottom:4px;
+    }
+
+    .faq-a{
+      font-size:0.85rem;
+      color:var(--muted);
+    }
+
+    .highlight-box{
+      border-radius:var(--radius-lg);
+      border:1px solid rgba(52,211,153,0.8);
+      background:radial-gradient(circle at top left,#064e3b,#020617 60%);
+      padding:14px;
+      margin-top:18px;
+    }
+
+    .highlight-title{
+      font-size:1rem;
+      margin-bottom:6px;
+    }
+
+    .highlight-text{
+      font-size:0.88rem;
+      color:#e5e7eb;
+      margin-bottom:10px;
+    }
+
+    footer{
+      margin-top:26px;
+      font-size:0.76rem;
+      color:var(--muted);
+      border-top:1px solid rgba(31,41,55,1);
+      padding-top:10px;
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div class="top-nav">
+        <div class="logo">
+          <span class="logo-dot"></span>
+          <span>Planilha Financeira Inteligente 360º</span>
+        </div>
+        <div class="top-links">
+          <a href="index.html" class="pill-nav">🏠 Página inicial</a>
+          <a href="app.html" class="pill-nav">📊 Acessar versão Free</a>
+          <a href="app-pro.html" class="pill-nav">💎 Versão PRO</a>
+        </div>
+      </div>
+
+      <div class="hero-grid">
+        <div>
+          <div class="badge">
+            🔍 Conteúdo educativo • SEO • Controle financeiro na prática
+          </div>
+          <h1>
+            Planilha Financeira Inteligente <span>360º</span> para organizar sua vida em minutos.
+          </h1>
+          <p class="hero-sub">
+            Se você nunca sabe para onde o dinheiro está indo, vive “apagando incêndio” com dívidas
+            e tem medo de olhar o extrato, esta página é para você. Aqui você aprende o passo a passo
+            para organizar suas finanças e ainda ganha acesso a uma planilha viva, que funciona direto
+            do navegador – com versão gratuita e versão PRO.
+          </p>
+
+          <div class="hero-cta">
+            <a href="app.html">
+              <button class="btn btn-primary" type="button">
+                Começar agora com a versão gratuita
+              </button>
+            </a>
+            <a href="app-pro.html">
+              <button class="btn btn-ghost" type="button">
+                Ver tudo o que a versão PRO libera
+              </button>
+            </a>
+          </div>
+
+          <div class="mini-metric">
+            <span class="mini-tag">✔ Nada para instalar</span>
+            <span class="mini-tag">✔ Funciona em celular e computador</span>
+            <span class="mini-tag">✔ Seus dados ficam apenas no seu dispositivo</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <p class="hero-highlight">
+            <strong>Resumo rápido:</strong><br />
+            A Planilha Financeira Inteligente 360º é um aplicativo web que:
+          </p>
+          <ul>
+            <li>Mostra quanto entra, quanto sai e quanto realmente sobra no mês.</li>
+            <li>Organiza gastos por categoria (moradia, alimentação, transporte etc.).</li>
+            <li>Diferencia despesas fixas, variáveis e compras parceladas.</li>
+            <li>Na versão PRO, exibe um calendário com o impacto das parcelas nos próximos 12 meses.</li>
+          </ul>
+          <p class="hero-note">
+            Em vez de fórmulas complicadas no Excel, você só preenche os campos e deixa a planilha
+            fazer as contas e análises automaticamente.
+          </p>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <!-- Seção 1: Por que você não consegue juntar dinheiro -->
+      <section>
+        <h2>Por que é tão difícil controlar o dinheiro só “de cabeça”?</h2>
+        <p>
+          A maioria das pessoas não tem um problema de <strong>inteligência</strong>, e sim de
+          <strong>visão</strong>. Sem enxergar o todo, fica impossível tomar boas decisões.
+        </p>
+        <p>Três coisas atrapalham o seu controle financeiro hoje:</p>
+        <ul>
+          <li>Você sabe quanto ganha, mas não sabe exatamente quanto gasta por categoria.</li>
+          <li>Compras parceladas se acumulam, e você perde a noção de quanto está comprometido nos próximos meses.</li>
+          <li>Não existe um lugar simples que mostre: renda → despesas → saldo → alertas.</li>
+        </ul>
+        <p>
+          A Planilha Financeira Inteligente 360º foi criada exatamente para resolver isso:
+          <strong>transformar seus números em um painel claro, visual e atualizado em tempo real.</strong>
+        </p>
+      </section>
+
+      <!-- Seção 2: O que a planilha faz na prática -->
+      <section>
+        <h2>O que a Planilha Financeira Inteligente 360º faz por você na prática</h2>
+        <div class="grid-2">
+          <div class="feature-card">
+            <div class="feature-label">Versão Free (online e gratuita)</div>
+            <div class="feature-title">Primeiro passo para organizar o mês</div>
+            <p>
+              A versão gratuita é ideal para quem quer começar sem complicação. Você informa sua renda
+              mensal e até 8 gastos principais, e a planilha:
+            </p>
+            <ul>
+              <li>Calcula automaticamente o total de despesas.</li>
+              <li>Mostra o saldo que sobra ou que está faltando.</li>
+              <li>Aponta qual categoria está pesando mais no seu bolso.</li>
+              <li>Mostra o percentual da renda que já está comprometida.</li>
+            </ul>
+            <p>
+              Perfeita para quem quer <strong>sentir o poder do controle financeiro</strong> sem pagar nada.
+            </p>
+            <p><span class="tag-free">Incluído na versão Free</span></p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-label">Versão PRO (para controle completo)</div>
+            <div class="feature-title">Visão 360º com parcelas e calendário de 12 meses</div>
+            <p>
+              A versão PRO libera o potencial máximo da planilha. Além de tudo que a versão Free faz,
+              você também:
+            </p>
+            <ul>
+              <li>Cadastra gastos ilimitados.</li>
+              <li>Marca compras parceladas, informa quantas parcelas faltam e a data de vencimento.</li>
+              <li>Vê um calendário dos próximos 12 meses com o total de parcelas em cada mês.</li>
+              <li>Tem insights automáticos sobre as categorias que mais consomem sua renda.</li>
+            </ul>
+            <p>
+              É como ter um <strong>radar financeiro</strong> mostrando quando o aperto diminui
+              e quando será possível respirar melhor.
+            </p>
+            <p><span class="tag-pro">Recursos exclusivos da versão PRO</span></p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Seção 3: Como usar passo a passo -->
+      <section>
+        <h2>Como usar a Planilha Financeira Inteligente 360º em 3 passos</h2>
+
+        <h3>1. Informe sua renda mensal</h3>
+        <p>
+          Comece preenchendo quanto entra por mês: salário, comissões, bicos, renda extra. Não precisa
+          ser perfeito – é melhor ter um número aproximado do que nenhum número.
+        </p>
+
+        <h3>2. Cadastre seus gastos por categoria</h3>
+        <p>
+          Em seguida, cadastre seus gastos. Use as principais categorias que já estão prontas na planilha:
+          moradia, alimentação, transporte, dívidas, lazer, saúde, educação, investimentos e reserva de
+          emergência.
+        </p>
+        <p>
+          Na versão PRO, você também marca se o gasto é
+          <strong>fixo, variável ou parcelado</strong> e, no caso das parcelas, quantas ainda faltam
+          e qual a data de vencimento.
+        </p>
+
+        <h3>3. Leia o resumo e os alertas</h3>
+        <p>
+          Assim que você preenche, o painel já mostra:
+        </p>
+        <ul>
+          <li>Quanto você está gastando no total.</li>
+          <li>Se está sobrando dinheiro ou se terminou o mês no vermelho.</li>
+          <li>Qual categoria está puxando mais a sua renda.</li>
+          <li>Na versão PRO, quanto das próximas parcelas ainda está te prendendo.</li>
+        </ul>
+        <p>
+          A partir daí, fica muito mais fácil decidir o que cortar, o que renegociar e quando dá para
+          começar a juntar dinheiro de verdade.
+        </p>
+      </section>
+
+      <!-- Seção 4: FAQ -->
+      <section>
+        <h2>Perguntas frequentes sobre a Planilha Financeira Inteligente 360º</h2>
+
+        <div class="faq-item">
+          <div class="faq-q">Preciso instalar alguma coisa para usar?</div>
+          <div class="faq-a">
+            Não. A planilha funciona direto no navegador, como um site normal.
+            Você pode usar no computador ou no celular, desde que tenha acesso à internet.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q">Meus dados ficam salvos onde?</div>
+          <div class="faq-a">
+            Seus dados ficam salvos apenas no <strong>seu próprio dispositivo</strong>, usando o armazenamento
+            local do navegador (localStorage). Nenhuma informação é enviada para servidor.
+            Se outra pessoa abrir o link em outro celular ou computador, ela verá tudo zerado.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q">Qual a diferença prática entre a versão Free e a versão PRO?</div>
+          <div class="faq-a">
+            A versão Free é limitada a 8 gastos e não mostra calendário de parcelas.
+            A versão PRO libera lançamentos ilimitados, controle de compras parceladas com data de
+            vencimento e um calendário dos próximos 12 meses mostrando quanto você ainda vai pagar
+            em parcelas mês a mês.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q">Posso começar pela versão gratuita e depois ir para a PRO?</div>
+          <div class="faq-a">
+            Sim. A ideia é exatamente essa: você começa sentindo como é ter sua vida financeira
+            resumida em um painel simples. Quando quiser uma visão completa com parcelas e futuro,
+            faz o upgrade para a versão PRO.
+          </div>
+        </div>
+      </section>
+
+      <!-- Seção 5: Chamada final -->
+      <section class="highlight-box">
+        <div class="highlight-title">Comece hoje a enxergar o que o banco não mostra.</div>
+        <p class="highlight-text">
+          Ter controle financeiro não é sobre decorar fórmulas, é sobre <strong>ver o quadro completo</strong>
+          e tomar decisões conscientes. A Planilha Financeira Inteligente 360º foi criada para isso:
+          transformar números soltos em uma visão clara da sua vida financeira.
+        </p>
+        <div class="hero-cta">
+          <a href="app.html">
+            <button class="btn btn-primary" type="button">
+              Usar a versão gratuita agora
+            </button>
+          </a>
+          <a href="app-pro.html">
+            <button class="btn btn-ghost" type="button">
+              Conhecer recursos da versão PRO
+            </button>
+          </a>
+        </div>
+        <p style="font-size:0.78rem;color:#e5e7eb;margin-top:8px;">
+          Você pode voltar nesta página sempre que quiser revisar o passo a passo ou compartilhar
+          com alguém que também precise organizar as finanças.
+        </p>
+      </section>
+    </main>
+
+    <footer>
+      <span>© Planilha Financeira Inteligente 360º – Ferramenta educativa de controle financeiro pessoal.</span>
+      <span>Funciona direto no navegador • Nada de Excel complicado • Nada de app pesado.</span>
+    </footer>
+  </div>
+
+  <!-- Schema FAQ para SEO (Google) -->
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"FAQPage",
+    "mainEntity":[
+      {
+        "@type":"Question",
+        "name":"Preciso instalar alguma coisa para usar a Planilha Financeira Inteligente 360º?",
+        "acceptedAnswer":{
+          "@type":"Answer",
+          "text":"Não. A planilha funciona direto no navegador, como um site normal. Você pode usar no computador ou no celular, desde que tenha acesso à internet."
+        }
+      },
+      {
+        "@type":"Question",
+        "name":"Meus dados ficam salvos onde?",
+        "acceptedAnswer":{
+          "@type":"Answer",
+          "text":"Seus dados ficam salvos apenas no seu próprio dispositivo, usando o armazenamento local do navegador (localStorage). Nenhuma informação é enviada para servidor."
+        }
+      },
+      {
+        "@type":"Question",
+        "name":"Qual a diferença entre a versão Free e a versão PRO?",
+        "acceptedAnswer":{
+          "@type":"Answer",
+          "text":"A versão Free é limitada a 8 gastos e não mostra calendário de parcelas. A versão PRO libera lançamentos ilimitados, controle de compras parceladas com data de vencimento e um calendário dos próximos 12 meses."
+        }
+      },
+      {
+        "@type":"Question",
+        "name":"Posso começar pela versão gratuita e depois ir para a PRO?",
+        "acceptedAnswer":{
+          "@type":"Answer",
+          "text":"Sim. Você pode testar tudo na versão gratuita e, quando quiser uma visão completa com parcelas e calendário, fazer o upgrade para a versão PRO."
+        }
+      }
+    ]
+  }
+  </script>
+</body>
+</html>
